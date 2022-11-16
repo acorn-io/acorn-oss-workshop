@@ -1,26 +1,19 @@
-In this series of articles we will use a sample microservice application and show how we can build / run / package and distribute it using Acorn.
+## Defining the application in an Acornfile
 
-The current article (first in the series) will introduce our demo application and show how it can be defined and run using a simple Acornfile. As a demo environment we will use a 2-node cluster created on Civo, a cloud provider offering k3s managed clusters. If you want to follow along this tutorial you can also create a simple local cluster install an ingress controller and acorn on it.
-
-
-
-Defining the application in an Acornfile
 As described in the documentation, an Acornfile contains the following top level elements:
 
-args: defines arguments the consumer can provide
-profiles: defines a set of default arguments for different deployment types
-containers: defines the containers to run the application
-volumes: defines persistent storage volumes for the containers to consume
-jobs: defines tasks to run on changes or via cron
-acorns: other Acorn applications that need to be deployed with your app
-secrets: defines secret bits of data that are automatically generated or passed by the user
-localData: default data and configuration variables
-To represent the microservices of the VotingApp, we create an Acornfile in the votingapp folder. This file only contains the containers top level key:
+- args: defines arguments the consumer can provide
+- profiles: defines a set of default arguments for different deployment types
+- containers: defines the containers to run the application
+- volumes: defines persistent storage volumes for the containers to consume
+- jobs: defines tasks to run on changes or via cron
+- acorns: other Acorn applications that need to be deployed with your app
+- secrets: defines secret bits of data that are automatically generated or passed by the user
+- localData: default data and configuration variables
 
-containers: {
-}
-Next, we add inside of it an element for each microservice:
+To represent the microservices of the VotingApp, we create an Acornfile in the *votingapp* folder. This file only contains the containers top level key and an empty element for each microservice:
 
+```
 containers: {
   voteui: {
   }
@@ -43,12 +36,16 @@ containers: {
   resultui: {
   }
 }
+```
+
 As the microservice will run in containers, we need to specify how the containers can be built or which image it is based on:
 
-for the vote-ui, vote, worker, result and result-ui microservices we use the build.context property to reference the location of the Dockerfile that will be used to build the image
-for db and redis we specify the image property
-Our Acornfile now looks as follows:
+- for the vote-ui, vote, worker, result and result-ui microservices we use the build.context property to reference the location of the Dockerfile that will be used to build the image
+- for db and redis we specify the image property
 
+Make sure the Acornfile now looks as follows:
+
+```
 containers: {
  voteui: {
    build: {
@@ -88,19 +85,25 @@ containers: {
    }
  }
 }
+```
+
 For the postgres image to run we need to provide it the POSTGRES_PASSWORD environment variable. In this example we also define the POSTGRES_USER. 
 
 The definition of the db container is as follows:
 
+```
 db: {
    image: "postgres:13.2-alpine"
    env: {
      "POSTGRES_USER": "postgres"
      "POSTGRES_PASSWORD": "postgres"
    }
- }
+}
+```
+
 As result needs to connect to db, we specify the credentials in that container too:
 
+```
 result: {
    build: "./result"
    ports: "5000/http"
@@ -108,9 +111,12 @@ result: {
      "POSTGRES_USER": "postgres"
      "POSTGRES_PASSWORD": "postgres"
    }
- }
+}
+```
+
 worker also communicates with db so we also give it the credentials it needs:
 
+```
 worker: {
    build: "./worker/go"
    env: {
@@ -118,19 +124,23 @@ worker: {
      "POSTGRES_PASSWORD": "postgres"
    }
  }
-I do agree providing secrets in plain text is definitely not the way to go. In a future article in the series we’ll show how to use Acorn secrets to have a much cleaner / safer approach.
+```
+
+In a future article in the series we’ll show how to use Acorn secrets to have a much cleaner / safer approach and avoid to specify the password in the plain text :)
 
 In order for the container of the application to communicate with each other we need to define the network ports for each one. As defined in the documentation, there are 3 scopes to specify the ports:
 
-internal allows communication between containers within the same Acorn app
-expose allows communication between containers within the cluster
-publish allows containers to be reached from outside of the cluster
+- internal allows communication between containers within the same Acorn app
+- expose allows communication between containers within the cluster
+- publish allows containers to be reached from outside of the cluster
+
 As vote, result, redis and db microservices only need to be reachable from other containers within the same application, we use the default internal scope for each of them.
 
 As vote-ui and result-ui need to be reachable from the outside world we use the publish scope for both of them.
 
 The Acornfile now looks as follows:
 
+```
 containers: {
  voteui: {
    build: "./vote-ui"
@@ -178,12 +188,18 @@ result: {
    ports: publish : "80/http"
  }
 }
+```
+
 We now have a first (minimal) version of the Acornfile which specifies the application. Let’s make sure the Voting App can be run using that one.
 
-Testing the application
+## Testing the application
+
 We run the Voting Application using the acorn CLI:
 
+```
 acorn run -n vote .
+```
+
 It takes a few tens of seconds for the application to be up and running. When it’s ready we are provided http endpoints on the acorn.io domain for both vote-ui and result-ui containers:
 
 vote-ui : http://resultui-vote-5ccf7969.po4pog.alpha.on-acorn.io
@@ -192,6 +208,7 @@ result-ui: http://voteui-vote-5ccf7969.po4pog.alpha.on-acorn.io
 
 Using the acorn CLI we can visualize all the acorn resources created:
 
+```
 % acorn all
  
 APPS:
@@ -213,10 +230,13 @@ NAME      APP-NAME   BOUND-VOLUME   CAPACITY   STATUS    ACCESS-MODES   CREATED
  
 SECRETS:
 ALIAS     NAME      TYPE      KEYS      CREATED
+```
+
 The application’s containers have been created and exposed. Currently there are no secrets nor volumes as we did not defined those top level elements in the Acornfile.
 
 If you are curious about what happened under the hood, we could see that a new Kubernetes namespace has been created in the cluster, this one is dedicated to our newly created acorn application:
 
+```
 $ kubectl get ns
 NAME                STATUS   AGE
 default             Active   4h48m
@@ -273,3 +293,4 @@ resultui   <none>   resultui-vote-5ccf7969.po4pog.alpha.on-acorn.io   74.220.24.
 We can then remove the application using the following command:
 
 acorn rm vote
+```

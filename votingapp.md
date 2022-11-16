@@ -26,9 +26,9 @@ Below are the details of each microservice:
 - result is the backend sending votes to the result-ui via websocket
 - result-ui is a web UI built with Angular, it displays the results of the votes
 
-This app was originally living in a single GitHub repo. In order to enhance it I created a GitLab project inside of which each microservice has its own git repository. 
+This app was originally living in a single GitHub repo, it is now in a GitLab project inside of which each microservice has its own git repository. 
 
-To prepare the following steps, we create a new folder and clone the application code inside of it:
+To prepare the following steps, run a following commands from the VM created in the previous step to get the application code:
 
 ```
 mkdir votingapp

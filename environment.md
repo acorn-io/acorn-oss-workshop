@@ -2,40 +2,68 @@ In the next steps we will set up the environment we will use for the workshop.
 
 ## Kubernetes cluster
 
-To illustrate this article, we will use a one node k3s cluster with the Traefik Ingress Controller installed. An Ingress Controller is needed for Acorn to expose applications, also a StorageClass is needed for Acorn to provide storage to containers that need it.
+To illustrate this article, we will use a one node k3s cluster.
+k3s comes with an Ingress Controller and a StorageClass by default, which is great as both are needed by Acorn so it can expose applications and provide storage to containers that need it.
 
 ### Provisionning a VM
 
-```
-multipass launch -n k3s
-```
+[Multipass](https://multipass.run) is a great tool (available on MacOS, Windows and Linux) to spin up Ubuntu VM in a breeze. We will use Multipass in this workshop but you can use the provisonning tool of your choice.
 
-Run a shell in the new VM:
+The following command launch a VM named k3s with a couple of additional options:
+
+```
+multipass launch -n k3s -c 2 -d 10G -m 2G
+```
 
 ### Install k3s
+
+First run a shell in this new VM:
 
 ```
 multipass shell k3s
 ```
 
-Install k3s inside that one:
+Next install k3s inside that one:
 
 ```
 curl -sSL https://get.k3s.io | sh
 ```
 
-### Get the kubeconfig
+Next configure kubectl to it uses the kubeconfig file created by k3s:
 
 ```
+mkdir -p $HOME/.kube
+sudo mv -i /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
+Then you should be able to access your *one node* cluster:
+
+```
+$ kubectl get node
+NAME   STATUS   ROLES                  AGE   VERSION
+k3s    Ready    control-plane,master   25s   v1.25.3+k3s1
+```
 
 ## Acorn
 
-First we install the Acorn CLI following the installation documentation. On MacOS and Linux this handy installation script can be used:
+Now you have a local Kubernetes, you will install Acorn inside of it.
+
+First we download and install the Acorn CLI following the installation documentation, on MacOS and Linux this handy installation script can be used:
 
 ```
-$ curl https://get.acorn.io | sh
+curl https://get.acorn.io | sh
+```
+
+You should get an output similar to the following one:
+
+```
+[INFO]  Finding release for channel latest
+[INFO]  Using v0.3.1 as release
+[INFO]  Downloading hash https://github.com/acorn-io/acorn/releases/download/v0.3.1/checksums.txt
+[INFO]  Downloading archive https://github.com/acorn-io/acorn/releases/download/v0.3.1/acorn-v0.3.1-linux-arm64.tar.gz
+[INFO]  Verifying binary download
+[INFO]  Installing acorn to /usr/local/bin/acorn
 ```
 
 Running the acorn command without any parameters returns the full list of commands available to manage Acorn’s applications. We will use a couple of those commands in the next steps.
@@ -92,15 +120,20 @@ Next we install the Acorn server side components in the cluster:
 
 ```
 $ acorn install
+```
+
 This should give a result like the following one:
 
+```
   ✔  Running Pre-install Checks
   ✔  Installing ClusterRoles
-  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.2.1)
+  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.3.1)
   ✔  Waiting for controller deployment to be available
   ✔  Waiting for API server deployment to be available
+  ✔  Running Post-install Checks
+  ✔  Running Post-install Checks
   ✔  Installation done
-````
+```
 
 Acorn is installed and ready to manage containerized applications !
 
