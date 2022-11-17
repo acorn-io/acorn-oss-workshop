@@ -227,6 +227,13 @@ db-creds                     secrets.acorn.io/basic           2      3m56s
 ```
 </details>
 
+You can now remove the application and the associated secret:
+
+```
+acorn rm vote
+acorn rm -s db-creds
+```
+
 There are cases where we want to create a secret externally, this is what we will explore in the next part.
 
 ## Managing secrets from the command line
