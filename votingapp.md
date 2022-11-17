@@ -36,5 +36,5 @@ done
 
 In the next step you will create your first Acornfile to specify the application.
 
-[Previous](./environment.md)
+[Previous](./environment.md)  
 [Next](./acornfile.md)

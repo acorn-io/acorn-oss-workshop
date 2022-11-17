@@ -137,5 +137,5 @@ This should return a content similar to the following one:
 
 Acorn is installed and ready to manage containerized applications. I
 
-[Previous](./acorn.md)
+[Previous](./acorn.md)  
 [Next](./votingapp.md)

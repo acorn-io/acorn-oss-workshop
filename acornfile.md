@@ -249,7 +249,7 @@ The application’s containers have been created and exposed. Currently there ar
 <details>
   <summary markdown="span">If you are curious...</summary>
 
-If you are curious about what happened under the hood, we could see that a new Kubernetes namespace has been created in the cluster, this one is dedicated to our newly created acorn application:
+... about what happened under the hood, we could see that a new Kubernetes namespace has been created in the cluster, this one is dedicated to our newly created acorn application:
 
 ```
 $ kubectl get ns
@@ -326,5 +326,5 @@ Wait a couple of seconds and make sure the list of acorn resources is now empty:
 acorn all
 ```
 
-[Previous](./votingapp.md)
+[Previous](./votingapp.md)  
 [Next](./secret.md)
