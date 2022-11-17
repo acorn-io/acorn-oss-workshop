@@ -29,5 +29,5 @@ Verify the image now exists in the DockerHub:
 Your version of the VotingApp is now available in the DockerHub and it can be used by anyone using the following command:
 
 ```
-acorn run --name webhooks docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.0 .
+acorn run -n vote docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.0 .
 ```
