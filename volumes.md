@@ -1,6 +1,4 @@
-In the previous step we enhanced the Acornfile of the VotingApp and added Acorn secrets inside of it. In this article we will add a storage definition for both redis and Postgres containers so we can persist their data.
-
-As a reminder, below is the Acornfile we defined up till now:
+In the previous step we enhanced the Acornfile of the VotingApp and added Acorn secrets inside of it. In this step we will add a storage definition for both redis and Postgres containers so we can persist their data. As a reminder, we ended up with the following Acornfile:
 
 ```
 containers: {
@@ -63,19 +61,13 @@ secrets: {
 }
 ```
 
-Both db and redis containers are databases but as we didn’t specify any storage related properties, the data of each container are stored in the file system of the container. This means that when a container is deleted and recreated the data is lost. This is usually fine in a development environment but definitely not what we want in production. 
+Both db and redis containers are databases but as we didn’t specify any storage related properties, the data of each container are stored in their own file system. This is usually fine in a development environment but definitely not what we want in production. 
 
-## About Acorn volumes
-
-To ensure data is persisted for both containers we will use Acorn volumes. As we have done in the post dedicated to secrets, we can define volumes using acorn cli or directly in the Acornfile. We will see both approaches in the following.
-
-Note: Acorn volumes is an abstraction above Kubernetes volumes resources which are PersistentVolume and PersistentVolumeClaim. For volume to be created with Acorn a StorageClass must exists in the underlying Kubernetes cluster.
-
-Note: If you follow along this series of tutorials you need to ensure the Kubernetes cluster you are using has a default StorageClass defined. In case you use a k3s cluster you're all set as k3s has a default StorageClass (based on the local path provisioner)
+To ensure data is persisted for both containers we will use Acorn volumes (under the hood this is an abstraction above Kubernetes PersistentVolume resource type).
 
 # Defining volumes in the Acornfile
 
-Volumes is another top level key we can use in an Acornfile. It allows to define storage that will be referenced by the containers which need it. For our needs we define 2 différent volumes, one for each databases of the VotingApp. The following shows how those volumes are defined using the default StorageClass existing in the cluster
+Volumes is another top level key we can use in an Acornfile. It allows to define storage that will be referenced by the containers which need it. For our needs we define 2 different volumes, one for each databases of the VotingApp. The following shows how those volumes are defined using the default StorageClass existing in the cluster (as we are using k3s a StorageClass based on LocalPath provisioner already exists in the cluster):
 
 ```
 volumes: {
@@ -88,7 +80,7 @@ volumes: {
 }
 ```
 
-Note: by default a volume is created using the default StorageClass, a size of 10G and a "readWriteOnce" access mode. This can be customized to one needs using the dedicated properties. 
+Note: by default a volume is created using the *default* StorageClass, a size of 10G and a "readWriteOnce" access mode. This can be customized to one needs using dedicated properties. 
 
 Once defined in the *volumes* top level key, we need to mount each volumes in the corresponding container knowing that:
 - postgres persists its data in */var/lib/postgresql/data*
@@ -122,7 +114,7 @@ redis: {
   }
 ```
 
-The Acornfile should now look like the following:
+Your Acornfile should now look like the following:
 
 ```
 containers: {
@@ -200,44 +192,33 @@ volumes: {
 }
 ```
 
-Run the application:
+Run the application using this new version of the Acornfile:
 
 ```
 acorn run -n vote .
 ```
 
-As in the previous step, you should be returned the http endpoints used to access both vote-ui and result-ui frontend.
+As in the previous step, you should be returned the http endpoints used to access both vote-ui and result-ui frontend. 
+
+<details>
+  <summary markdown="span">If you curious about...</summary>
+
+... what happened under the hood, you can see 2 PersistentVolume have been created, one for each database container:
 
 ```
-STATUS: ENDPOINTS[http://resultui-vote-ed7fcdc6.4hr4qw.alpha.on-acorn.io => resultui:80, http://voteui-vote-ed7fcdc6.4hr4qw.alpha.on-acorn.io => voteui:80] HEALTHY[7] UPTODATE[7] OK
+$ kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                     STORAGECLASS   REASON   AGE
+pvc-a5c35cfd-8326-4da9-a256-68da4e4e6739   10G        RWO            Retain           Bound    vote-679fd5c9-04d/redis   local-path              55s
+pvc-9591c7bc-71bb-4e12-8fba-4544ba021ffe   10G        RWO            Retain           Bound    vote-679fd5c9-04d/db      local-path              55s
 ```
 
-You can then access the vote-ui, vote for your favorite pet and see the result:
+</details>
 
-![vote-ui](./images/volumes/vote-ui.png)
-
-![result-ui](./images/volumes/result-ui.png)
-
-If you curious to see what happened under the hood, you can see 2 PersistentVolume have been created
+Note: from the cli it's possible to specify the caracteristics of a volume already defined in the Acornfile. For instance, to run the application you could have run the following command specifying 200M of storage for each volume (instead of the 100M specified in the Acornfile):
 
 ```
-TODO
+acorn run -n vote -v db,size=200M -v redis,size=200M .
 ```
 
-In this part we have defined the volumes in the Acornfile. When running the application we can change the configuration of the volume right from the command line as we will see in the next part.
-
-## Defining volumes from the acorn cli
-
-From the cli it's possible to specify the caracteristics of a volume already defined in the Acornfile. For instance, the following command runs the application specifying 200M of storage for each volume (instead of the 100M specified in the Acornfile)
-
-```
-acorn run -v db,size=200M -v redis,size=200M .
-```
-
-## Summary 
-
-In this section we explained how to add volumes to persist data for both database containers.
-
-In the next step of the series we will introduce the development mode provided by Acorn.
-
-
+[Previous](./secret.md)  
+[Next](./acorn_image.md)
