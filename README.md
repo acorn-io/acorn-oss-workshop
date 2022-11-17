@@ -1,7 +1,11 @@
+----- This is currently a WIP -----
+
 # Acorn workshop
 
-In this workshop we will use a sample microservice application and show how we can build / run / package and distribute it using Acorn.
+In this workshop we will use a sample microservice application and show how we can build / run / package and distribute it using [Acorn](https://acorn.io).  
 
+We will go along the following steps:  
+  
 [Introduction to Acorn](./acorn.md)  
 [Environment](./environment.md)  
 [Sample application](./votingapp.md)  
