@@ -1,22 +1,20 @@
 ## About the sample application
 
-To demo several features of Acorn we will use the Voting App, a demo microservices application originally created by Docker. This application might not follow all the best architectural patterns but it’s definitely great for demos as it uses several languages, different components, and it’s very easy to understand. It basically allows a user to vote from a web interface and to see the results from another one.
+In this workshop we will use the Voting App, a demo microservices application originally created by Docker. This application uses several languages, different components, and it’s very easy to understand. It basically allows a user to vote from a web interface and to see the results from another one.
 
-Web interface used to select for an item
+Web interface used to select for an item:
 
 ![Vote UI](./images/votingapp/vote-ui.png)
 
-
-Web interface showing the result of the vote
+Web interface showing the result of the vote:
 
 ![Result UI](./images/votingapp/result-ui.png)
 
-
-The application follows the architecture below:
+The application follows the following architecture:
 
 ![Architecture](./images/votingapp/architecture.png)
 
-Below are the details of each microservice:
+Let's give a quick overview of each microservice of the application:
 
 - vote-ui is a web UI built with VueJS, it allows a user to choose an item between Cats and Dogs
 - vote is a backend exposing an API built with Python / Flask
@@ -26,9 +24,7 @@ Below are the details of each microservice:
 - result is the backend sending votes to the result-ui via websocket
 - result-ui is a web UI built with Angular, it displays the results of the votes
 
-This app was originally living in a single GitHub repo, it is now in a GitLab project inside of which each microservice has its own git repository. 
-
-To prepare the following steps, run a following commands from the VM created in the previous step to get the application code:
+From a shell in the VM you created in the previous step, run the following command to get the code of each microservice:
 
 ```
 mkdir votingapp
@@ -38,4 +34,7 @@ for s in vote-ui vote worker result result-ui; do
 done
 ```
 
-In the next step we will see how this application can be defined with Acorn.
+In the next step you will create your first Acornfile to specify the application.
+
+[Previous](./environment.md)
+[Next](./acornfile.md)

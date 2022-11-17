@@ -234,7 +234,10 @@ From the cli it's possible to specify the caracteristics of a volume already def
 acorn run -v db,size=200M -v redis,size=200M .
 ```
 
-# Introducing the dev mode
+## Summary 
 
+In this section we explained how to add volumes to persist data for both database containers.
+
+In the next step of the series we will introduce the development mode provided by Acorn.
 
 

@@ -219,33 +219,51 @@ Using the following command we can get the list of actions we can perform on sec
 acorn secret --help
 ```
 
-Available actions to manage secrets
 First we create a secret named postgres-credential, of type basic, which contains 2 keys (username and password) and the associated values:
 
+```
 acorn secrets create --type basic --data username=postgres --data password=postgres postgres-credentials
+```
+
 We can list the existing secrets:
 
-acorn secrets
 This command provides an output similar to the one below.
 
+```
+```
 
 Once created we can easily retrieve the values:
 
+```
 acorn secret expose postgres_credentials
+```
+
 As we can see, nothing prevents us from retrieving the values of the secret in plain text once it is created:
 
+```
+```
 
 Acorn added an encryption feature in the latest release thus making it possible to encrypt a secret. Let’s then encrypt the postgres-credentials secret:
 
+```
 acorn secret encrypt postgres-credentials
+```
+
 We will be returned the encrypted version as follow (note the ACORNENC string at the beginning):
 
+```
+```
 
 Behind the hood, the encryption is done using the cluster’s public key which can be obtained with the following command:
 
+```
 acorn info
+```
+
 This provide an output similar to that one, the encryption key being defined under the .namespace.publicKeys.keyID property:
 
+```
+```
 
 We can then provide the db credential through this encrypted secret to the db, worker and result containers. This can be done either by passing the secret as an arg to the Acorn image or by providing it to the app at runtime. As we haven’t defined any args in the Acornfile (usage of args will be explained in a future post of the series) we will provide the secret at runtime. For that purpose we use the -s flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.
 
@@ -257,7 +275,8 @@ acorn run -s postgres-credentials:db-creds .
 
 As we’ve done previously we could verify the app is working fine and then vote for our favorite pet.
 
-## Summary 
+## Summary
+
 In this section we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secrets created from the command line instead. We focused on the connection to the db container but we could use the same approach to secure the connection to redis. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls within a configuration file.
 
 In the next article of the series we will build on this example and use the acorn volumes to add persistent storage to both databases.

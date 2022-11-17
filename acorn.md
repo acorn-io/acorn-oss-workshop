@@ -2,7 +2,7 @@
 
 When you develop a microservices application, chances are you are already familiar with Docker and are likely using Docker Compose to deploy the entire application on your local machine. When you need to deploy the application on Kubernetes it can be daunting especially if you are not familiar with this orchestrator. Indeed, it is first necessary to understand many Kubernetes concepts, to be aware of the existing resources (Pod, Deployment, Service, …) before knowing how to specify your application in yaml files or even as a Helm chart.
 
-Acorn is a new project (in version 0.3.1 at the time of writing) defined as a simple application deployment framework for Kubernetes. It uses a simple format to specify an application running in containers allowing the application to be run, packaged and distributed in any environment and deployed to Kubernetes without needing to know much about it.
+Acorn is a new project defined as a simple application deployment framework for Kubernetes. It uses a simple format to specify an application running in containers allowing the application to be run, packaged and distributed in any environment and deployed to Kubernetes without needing to know much about it.
 
 The following schema from Acorn documentation give a high level view of Acorn’s internals:
 
@@ -40,8 +40,10 @@ containers: {
   ports: publish: "2368/http"
  }
 }
-````
+```
 
 Of course the Acornfile format can easily embrace the complexity of a real-world multi-container application using the higher-level elements listed above.
 
 In this workshop, we will use a sample application and show to it can be handled with Acorn. Doing so we will study in details the structure of an Acornfile.
+
+[Next](./environment.md)

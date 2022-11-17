@@ -1,13 +1,13 @@
-In the next steps we will set up the environment we will use for the workshop.
+In this step we will set up the environment that will be used for the workshop.
 
 ## Kubernetes cluster
 
 To illustrate this article, we will use a one node k3s cluster.
-k3s comes with an Ingress Controller and a StorageClass by default, which is great as both are needed by Acorn so it can expose applications and provide storage to containers that need it.
+k3s comes with an Ingress Controller and a StorageClass by default which is great as both are needed by Acorn so it can expose and provide storage to the application containers.
 
 ### Provisionning a VM
 
-[Multipass](https://multipass.run) is a great tool (available on MacOS, Windows and Linux) to spin up Ubuntu VM in a breeze. We will use Multipass in this workshop but you can use the provisonning tool of your choice.
+[Multipass](https://multipass.run) is a great tool (available on MacOS, Windows and Linux) to spin up Ubuntu VM in a breeze. We will use Multipass in this workshop but you can use the provisonning tool of your choice to create a Ubuntu VM.
 
 The following command launch a VM named k3s with a couple of additional options:
 
@@ -17,13 +17,13 @@ multipass launch -n k3s -c 2 -d 10G -m 2G
 
 ### Install k3s
 
-First run a shell in this new VM:
+First run a shell in this new VM, this can be done easily using the following command with multipass:
 
 ```
 multipass shell k3s
 ```
 
-Next install k3s inside that one:
+Next install k3s:
 
 ```
 curl -sSL https://get.k3s.io | sh
@@ -55,7 +55,7 @@ First we download and install the Acorn CLI following the installation documenta
 curl https://get.acorn.io | sh
 ```
 
-You should get an output similar to the following one:
+You should get an output similar to the following one (your Acorn version might be different though):
 
 ```
 [INFO]  Finding release for channel latest
@@ -116,13 +116,13 @@ Flags:
 Use "acorn [command] --help" for more information about a command.
 ```
 
-Next we install the Acorn server side components in the cluster:
+Next install the Acorn server side components in the cluster:
 
 ```
-$ acorn install
+acorn install
 ```
 
-This should give a result like the following one:
+This should return a content similar to the following one:
 
 ```
   ✔  Running Pre-install Checks
@@ -135,5 +135,7 @@ This should give a result like the following one:
   ✔  Installation done
 ```
 
-Acorn is installed and ready to manage containerized applications !
+Acorn is installed and ready to manage containerized applications. I
 
+[Previous](./acorn.md)
+[Next](./votingapp.md)
