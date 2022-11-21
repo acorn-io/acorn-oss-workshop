@@ -210,9 +210,9 @@ Your endpoints should have the same format as the following ones (the identifier
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
-<img scr="./images/acornfile/vote-ui.png" width="500px">
+![Vote UI](./images/acornfile/vote-ui.png)
 
-<img scr="./images/acornfile/result-ui.png" width="500px">
+![Result UI](./images/acornfile/result-ui.png)
 
 Using the following command you can visualize all the acorn resources created:
 

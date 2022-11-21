@@ -195,12 +195,6 @@ After a couple of minutes you will get http endpoints (different from the ones y
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
-<img scr="./images/secrets/vote-ui.png" width="500px">
-
-<img scr="./images/secrets/result-ui.png" width="500px">
-
-You can then vote for your favorite pet once again and see the result of your vote.
-
 <details>
   <summary markdown="span">If you curious about...</summary>
 
@@ -283,18 +277,19 @@ This returns a result similar to that one, the encryption key being defined unde
 ---
 client:
   version:
-    commit: ef23e779493523b15fd929296620b04ebe713b16
-    tag: v0.3.1
+    commit: f717d41a2cce4e37258bd1a3cb39dfd5841d4253
+    tag: v0.4.0
 namespace:
   publicKeys:
-  - keyID: _ouglu_8m4fdmGHRBXwABz5OYqZs8GKKvbEqBrgczw8
+  - keyID: sgVNRZGN3QNnwHXslyNxyxZlytsP3yOk7SNDgWWnxjg
 server:
-  apiServerImage: ghcr.io/acorn-io/acorn:v0.3.1
+  apiServerImage: ghcr.io/acorn-io/acorn:v0.4.0
   config:
     acornDNS: auto
     acornDNSEndpoint: https://alpha-dns.acrn.io/v1
+    autoUpgradeInterval: 5m
     clusterDomains:
-    - .tcc3t3.alpha.on-acorn.io
+    - .klkue5.alpha.on-acorn.io
     defaultPublishMode: defined
     ingressClassName: null
     internalClusterDomain: svc.cluster.local
@@ -303,14 +298,15 @@ server:
     letsEncryptTOSAgree: false
     podSecurityEnforceProfile: baseline
     setPodSecurityEnforceProfile: true
-  controllerImage: ghcr.io/acorn-io/acorn:v0.3.1
+  controllerImage: ghcr.io/acorn-io/acorn:v0.4.0
   dirty: false
-  gitCommit: ef23e779493523b15fd929296620b04ebe713b16
+  gitCommit: f717d41a2cce4e37258bd1a3cb39dfd5841d4253
   letsEncryptCertificate: disabled
-  tag: v0.3.1
+  tag: v0.4.0
   userConfig:
     acornDNS: null
     acornDNSEndpoint: null
+    autoUpgradeInterval: null
     clusterDomains: null
     defaultPublishMode: ""
     ingressClassName: null
@@ -320,7 +316,7 @@ server:
     letsEncryptTOSAgree: null
     podSecurityEnforceProfile: ""
     setPodSecurityEnforceProfile: null
-  version: v0.3.1+ef23e779
+  version: v0.4.0+f717d41a
 ```
 
 We can then provide the db credential through this encrypted secret to the db, worker and result containers. For that purpose we use the *-s* flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.
