@@ -6,7 +6,7 @@ Acorn is a new project defined as a simple application deployment framework for 
 
 The following schema from Acorn documentation give a high level view of Acorn’s internals:
 
-![Acorn architecture](./images/acorn/architecture.png)
+<img scr="./images/acorn/architecture.png" width="500px">
 
 It defines 4 components:
 
@@ -17,7 +17,7 @@ It defines 4 components:
 
 Before deploying an application with acorn, we need to specify this one in an Acornfile. This file describes how to build, develop, and run containerized applications.
 
-![Acorn workflow](./images/acorn/workflow.png)
+<img scr="./images/acorn/workflow.png" width="500px">
 
 As described in the documentation, an Acornfile contains the following top level elements:
 

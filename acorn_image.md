@@ -24,7 +24,7 @@ acorn push docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.0
 
 Verify the image now exists in the DockerHub:
 
-![DockerHub](./images/distribution/dockerhub.png)
+<img scr="./images/distribution/dockerhub.png" width="500px">
 
 Your version of the VotingApp is now available in the DockerHub and it can be used by anyone using the following command:
 

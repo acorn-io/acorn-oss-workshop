@@ -195,9 +195,9 @@ After a couple of minutes you will get http endpoints (different from the ones y
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
-![Vote UI](./images/secrets/vote-ui.png)
+<img scr="./images/secrets/vote-ui.png" width="500px">
 
-![Result UI](./images/secrets/result-ui.png)
+<img scr="./images/secrets/result-ui.png" width="500px">
 
 You can then vote for your favorite pet once again and see the result of your vote.
 
