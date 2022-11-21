@@ -31,3 +31,6 @@ Your version of the VotingApp is now available in the DockerHub and it can be us
 ```
 acorn run -n vote docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.0 .
 ```
+
+[Previous](./volumes.md)  
+[Next](./development_mode.md)
