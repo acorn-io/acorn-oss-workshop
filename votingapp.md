@@ -4,15 +4,15 @@ In this workshop we will use the Voting App, a demo microservices application or
 
 Web interface used to select for an item:
 
-<img scr="./images/votingapp/vote-ui.png" width="500px">
+![Vote UI](./images/votingapp/vote-ui.png)
 
 Web interface showing the result of the vote:
 
-<img scr="./images/votingapp/result-ui.png" width="500px">
+![Result UI](./images/votingapp/result-ui.png)
 
 The application follows the following architecture:
 
-<img scr="./images/votingapp/architecture.png" width="500px">
+![Architecture](./images/votingapp/architecture.png)
 
 Let's give a quick overview of each microservice of the application:
 
