@@ -86,4 +86,32 @@ result-f4fd75fb5-66mjc: new socket.io connection
 
 We only show the development mode for the *result* microservice but the same principles would apply for the other microservices as well. As an additional exercise, change the Acornfile modifying the definition of the *vote* container to ensure the development mode is working fine for that one as well (the *vote* microservice is a Python flask application).
 
+<details>
+  <summary markdown="span">Solution</summary>
+
+To work with the development mode, the definition of the *vote* container can be modified as follows:
+
+```
+vote: {
+  if args.dev {
+      build: {
+        target: "dev"
+        context: "./vote"
+      }
+      dirs: {
+          "/app": "./vote"
+      }
+    } 
+    if !args.dev {
+      build: {
+        target: "production"
+      }
+    }  
+    ports: "5000/http"
+  }
+}
+```
+
+</details>
+
 [Previous](./acorn_image.md)
