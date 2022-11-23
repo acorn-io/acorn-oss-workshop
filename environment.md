@@ -16,7 +16,7 @@ In order to create a local VM, you can use [Multipass](https://multipass.run), i
 The following command launch a VM named k3s with a couple of additional options:
 
 ```
-multipass launch -n k3s -c 2 -d 10G -m 2G
+multipass launch -n k3s -c 2 -d 15G -m 2G
 ```
 
 #### Cloud provider
@@ -51,12 +51,17 @@ sudo mv -i /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-Then you should be able to access your *one node* cluster:
+Then you will be able to access your *one node* cluster:
 
 ```
-$ kubectl get node
+kubectl get node
+```
+
+You should get a return similar to the one below:
+
+```
 NAME   STATUS   ROLES                  AGE   VERSION
-k3s    Ready    control-plane,master   25s   v1.25.3+k3s1
+k3s    Ready    control-plane,master   42s   v1.25.4+k3s1
 ```
 
 ## Acorn
