@@ -1,0 +1,118 @@
+containers: {
+  
+  voteui: {
+    if args.dev {
+      dirs: "/usr/share/nginx/html": "./vote-ui"
+    } 
+    ports: publish : "80/http"
+  }
+
+  vote: {
+    if args.dev {
+      build: {
+        target: "dev"
+        context: "./vote"
+      }
+      dirs: {
+          "/app": "./vote"
+      }
+    }
+    if !args.dev {
+      build: {
+        target: "production"
+        context: "./vote"
+      }
+    }
+    ports: "5000/http"
+  }
+
+  redis: {
+    image: "redis:7.0.5-alpine3.16"
+    ports: "6379/tcp"
+    dirs: {
+      "/data": "volume://redis"
+    }
+  }
+
+  worker: {
+    build: "./worker/go"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+  }
+
+  db: {
+    image: "postgres:15.0-alpine3.16"
+    ports: "5432/tcp"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+    dirs: {
+      "/var/lib/postgresql/data*": "volume://db"
+    }
+  }
+
+  result: {
+    if args.dev {
+      build: target: "dev"
+      dirs: "/app": "./result"
+    } 
+    if !args.dev {
+      build: target: "production"
+    }  
+    ports: "5000/http"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+   }
+  }
+
+  resultui: {
+    if args.dev {
+      build: target: "dev"
+      dirs: "/app": "./result-ui"
+    } 
+    if !args.dev {
+      build: target: "static"
+    }
+    ports: publish : "80/http"
+  }
+}
+
+secrets: {
+    "db-creds": {
+        type: "basic"
+        data: {
+            username: ""
+            password: ""
+        }
+    }
+}
+
+volumes: {
+  "db": {
+      size: "100M"
+  }
+  "redis": {
+      size: "100M"
+  }
+}
+
+routers: {
+  voting: {
+    routes: {
+        "/vote": {
+            pathType: "prefix"
+            targetServiceName: "voteui"
+            targetPort: 80
+        }
+        "/result": {
+            pathType: "prefix"
+            targetServiceName: "resultui"
+            targetPort: 80
+        }
+    }
+  }
+}
