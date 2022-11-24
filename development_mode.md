@@ -46,6 +46,7 @@ result: {
   if !args.dev {
     build: {
       target: "production"
+      context: "./result"
     }
   }  
   ports: "5000/http"
@@ -107,6 +108,7 @@ vote: {
     if !args.dev {
       build: {
         target: "production"
+        context: "./vote"
       }
     }  
     ports: "5000/http"

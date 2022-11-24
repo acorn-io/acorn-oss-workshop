@@ -15,17 +15,13 @@ We will follow the steps below:
 - [Use Secret to secure connection to the db](./secret.md)
 - [Use volumes to persist data](./volumes.md)
 - [Build an distribute the application as an Acorn image](./acorn_image.md)
-- [Introduction to the Development mode](./development_mode.md)  
+- [Development mode](./development_mode.md)  
+- [Adding a router](./router.md)  
 
-Coming soon:
-- Add TLS certificates (*)
-- Use GitOps with ArgoCD
 
-(*) this is only possible if workshop environment is running on a cloud provider
- 
 [Let's get started](./acorn.md)
 
 ## Status
 
-The content of this worshop is still a work in progress.  
+The content of this worshop is still a work in progress, all the steps might not be fully documented. Additional content will come soon.    
 Feedback are more than welcome.
