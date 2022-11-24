@@ -18,7 +18,6 @@ We will follow the steps below:
 - [Development mode](./development_mode.md)  
 - [Adding a router](./router.md)  
 
-
 [Let's get started](./acorn.md)
 
 ## Status
