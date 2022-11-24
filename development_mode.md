@@ -120,4 +120,5 @@ vote: {
 
 We could also do the same with *vote-ui* and *result-ui* containers.
 
-[Previous](./acorn_image.md)
+[Previous](./acorn_image.md)  
+[Next](./router.md)
