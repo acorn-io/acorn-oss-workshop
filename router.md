@@ -15,19 +15,19 @@ routers:
     routes: {
         "/vote": {
             pathType: "prefix"
-            targetServiceName: "vote-ui"
-            targetPort: 5000
+            targetServiceName: "voteui"
+            targetPort: 80
         }
         "/result": {
             pathType: "prefix"
-            targetServiceName: "result-ui"
-            targetPort: 5000
+            targetServiceName: "resultui"
+            targetPort: 80
         }
     }
 }
 ```
 
-When the path of a request is */vote* or */result* the router is in charge of forwarding that request to the *vote-ui* or *result-ui* containers respectively.  
+When the path of a request is either */vote* or */result* the router is in charge of forwarding that request to the *voteui* or *resultui* containers respectively, on port 80.
 
 Note: the definition of the routers can also be defined in a more concise way as follows:
 
@@ -35,8 +35,8 @@ Note: the definition of the routers can also be defined in a more concise way as
 routers: 
   voting: {
     routes: {
-        "/vote": "vote-ui:5000"
-        "/result": "result-ui:5000"
+        "/vote": "voteui:80"
+        "/result": "resultui:80"
     }
   }
 }
@@ -49,13 +49,12 @@ acorn run -n vote .
 ```
 
 After a couple of seconds you will be returned 3 endpoints, they are similar to the following ones:
+
 - http://resultui-vote-f1825499e037.5its5i.alpha.on-acorn.io
 - http://voteui-vote-c7bc34b6f316.5its5i.alpha.on-acorn.io
 - http://voting-vote-fba3393a0c9a.5its5i.alpha.on-acorn.io
 
-While the 2 first ones are similar to the endpoints you get previously, the last one was created because of the definition of the router.
-
-The vote UI can then be accessed via ```http://voting-vote-fba3393a0c9a.5its5i.alpha.on-acorn.io/vote```, the result UI via ```http://voting-vote-fba3393a0c9a.5its5i.alpha.on-acorn.io/result```.
+The 2 first ones are similar to the endpoints you get previously (to access the *voteui* or the *resultui* containers directly). The last one was created because of the definition of the router. Using this last endpoint the vote UI can then be accessed via ```http://voting-vote-fba3393a0c9a.5its5i.alpha.on-acorn.io/vote```, the result UI via ```http://voting-vote-fba3393a0c9a.5its5i.alpha.on-acorn.io/result```.
 
 <details>
   <summary markdown="span">If you curious about...</summary>
