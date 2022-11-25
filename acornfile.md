@@ -10,6 +10,7 @@ As described in the documentation, an Acornfile contains the following top level
 - acorns: other Acorn applications that need to be deployed with your app
 - secrets: defines secret bits of data that are automatically generated or passed by the user
 - localData: default data and configuration variables
+- routers: support path based HTTP routing to expose multiple containers through a single published service
 
 To represent the microservices of the VotingApp, create an Acornfile in the *votingapp* folder. This file should only contains the *containers* top level key and an empty element for each microservice as follows:
 
@@ -326,7 +327,7 @@ Wait a couple of seconds and make sure the list of acorn resources is now empty:
 acorn all
 ```
 
-Note: you can find more information in [Authoring Acornfile](https://docs.acorn.io/authoring)
+Note: you can find more information about Acornfile in [Authoring Acornfile](https://docs.acorn.io/authoring)
 
 [Previous](./votingapp.md)  
 [Next](./secret.md)
