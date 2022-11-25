@@ -12,7 +12,7 @@ We will follow the steps below:
 - [Environment](./environment.md)
 - [Sample application](./votingapp.md)
 - [Write your first Acornfile](./acornfile.md)
-- [Use Secret to secure connection to the db](./secret.md)
+- [Use secret to secure connection to the db](./secret.md)
 - [Use volumes to persist data](./volumes.md)
 - [Build an distribute the application as an Acorn image](./acorn_image.md)
 - [Development mode](./development_mode.md)  
