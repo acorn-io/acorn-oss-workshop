@@ -120,5 +120,7 @@ vote: {
 
 We could also do the same with *vote-ui* and *result-ui* containers.
 
+Note: you can find more information about development mode in [the official documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
+
 [Previous](./acorn_image.md)  
 [Next](./router.md)

@@ -220,5 +220,7 @@ Note: from the cli it's possible to specify the caracteristics of a volume alrea
 acorn run -n vote -v db,size=200M -v redis,size=200M .
 ```
 
+Note: you can find more information about volumes in [the official documentation](https://docs.acorn.io/running/volumes)
+
 [Previous](./secret.md)  
 [Next](./acorn_image.md)

@@ -1,10 +1,27 @@
+args: {
+    replicas: 3
+}
+
+profiles: {
+    dev: {
+        replicas: 1
+    }
+    test: {
+        replicas: 2
+    }
+}
+
 containers: {
   
   voteui: {
     if args.dev {
       dirs: "/usr/share/nginx/html": "./vote-ui"
-    } 
+    }
+    build: {
+      context: "./vote-ui"
+    }
     ports: publish : "80/http"
+    scale: args.replicas
   }
 
   vote: {
@@ -56,11 +73,17 @@ containers: {
 
   result: {
     if args.dev {
-      build: target: "dev"
+      build: {
+        target: "dev"
+        context: "./result"
+      }
       dirs: "/app": "./result"
     } 
     if !args.dev {
-      build: target: "production"
+      build: {
+        target: "production"
+        context: "./result"
+      }
     }  
     ports: "5000/http"
     env: {
@@ -71,11 +94,17 @@ containers: {
 
   resultui: {
     if args.dev {
-      build: target: "dev"
+      build: {
+        target: "dev"
+        context: "./result-ui"
+      }
       dirs: "/app": "./result-ui"
     } 
     if !args.dev {
-      build: target: "static"
+      build: {
+        target: "static"
+        context: "./result-ui"
+      }
     }
     ports: publish : "80/http"
   }

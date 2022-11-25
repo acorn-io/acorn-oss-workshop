@@ -14,6 +14,8 @@ The application follows the following architecture:
 
 ![Architecture](./images/votingapp/architecture.png)
 
+Note: the VotingApp is hosted in GitLab in [https://gitlab.com/voting-application](https://gitlab.com/voting-application)
+
 Let's give a quick overview of each microservice of the application:
 
 - vote-ui is a web UI built with VueJS, it allows a user to choose an item between Cats and Dogs

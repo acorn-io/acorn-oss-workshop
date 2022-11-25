@@ -17,6 +17,7 @@ We will follow the steps below:
 - [Build an distribute the application as an Acorn image](./acorn_image.md)
 - [Development mode](./development_mode.md)  
 - [Adding a router](./router.md)  
+- [Introduction to args and profile](./profiles.md)  
 
 [Let's get started](./acorn.md)
 

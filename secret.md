@@ -329,6 +329,8 @@ acorn run -n vote -s postgres-credentials:db-creds .
 
 As we’ve done previously we could verify the app is working fine and then vote for our favorite pet.
 
+Note: you can find more information about secrets in [the official documentation](https://docs.acorn.io/authoring/secrets)
+
 ## Summary
 
 In this section we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secrets created from the command line instead. We focused on the connection to the db container but we could use the same approach to secure the connection to redis. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls in a configuration file.

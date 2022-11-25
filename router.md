@@ -99,5 +99,7 @@ data:
 ```
 </details>
 
+Note: you can find more information about routers in [the official documentation](https://docs.acorn.io/reference/acornfile#routers)
 
 [Previous](./development_mode.md)  
+[Next](./profiles.md)

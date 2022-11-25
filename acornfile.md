@@ -326,5 +326,7 @@ Wait a couple of seconds and make sure the list of acorn resources is now empty:
 acorn all
 ```
 
+Note: you can find more information in [Authoring Acornfile](https://docs.acorn.io/authoring)
+
 [Previous](./votingapp.md)  
 [Next](./secret.md)
