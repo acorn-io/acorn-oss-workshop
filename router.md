@@ -45,7 +45,7 @@ routers:
 You can now run the application using this new version of the Acornfile:
 
 ```
-acorn run -n vote .
+acorn run -n vote --update .
 ```
 
 After a couple of seconds you will be returned 3 endpoints, they are similar to the following ones:

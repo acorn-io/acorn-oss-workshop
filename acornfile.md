@@ -12,7 +12,7 @@ As described in the documentation, an Acornfile contains the following top level
 - localData: default data and configuration variables
 - routers: support path based HTTP routing to expose multiple containers through a single published service
 
-To represent the microservices of the VotingApp, create an Acornfile in the *votingapp* folder. This file should only contains the *containers* top level key and an empty element for each microservice as follows:
+To represent the microservices of the VotingApp, create an Acornfile in the *votingapp* folder. This file should only contain the *containers* top level key and an empty element for each microservice as follows:
 
 ```
 containers: {
@@ -39,10 +39,10 @@ containers: {
 }
 ```
 
-As the microservice will run in containers, we need to specify how the containers can be built or which image it is based on:
+As the microservice will run in containers, we need to specify either how the containers can be built or the image it is based on:
 
-- for the vote-ui, vote, worker, result and result-ui microservices we use the *build.context* property to reference the location of the Dockerfile that will be used to build the image
-- for db and redis we specify the image property
+- for *voteui*, *vote*, *worker*, *result* and *resultui* microservices we use the *build.context* property to reference the location of the Dockerfile which will be used to build the image
+- for *db* and *redis* we specify the image property
 
 Make sure the Acornfile now looks as follows:
 
@@ -88,9 +88,9 @@ containers: {
 }
 ```
 
-For the postgres image to run we need to provide it the POSTGRES_PASSWORD environment variable. In this example we also define the POSTGRES_USER. 
+For the postgres image to run we need to provide it the *POSTGRES_PASSWORD* environment variable. In this example we also define the *POSTGRES_USER*. 
 
-The definition of the db container is as follows:
+The definition of the *db* container is as follows:
 
 ```
 db: {
@@ -102,7 +102,7 @@ db: {
 }
 ```
 
-As result needs to connect to db, we specify the credentials in that container too:
+As *result* needs to connect to *db*, we specify the credentials in that container too:
 
 ```
 result: {
@@ -115,7 +115,7 @@ result: {
 }
 ```
 
-as worker also communicates with db we also give it the credentials it needs:
+as *worker* also communicates with *db* we give it the credentials it needs:
 
 ```
 worker: {
@@ -127,17 +127,17 @@ worker: {
  }
 ```
 
-Note: in the next step we’ll show how to use Acorn secrets to avoid to specify the password in the plain text
+Note: in the next step we’ll show how to use Acorn secrets to avoid to specify the password in plain text
 
-In order for the container of the application to communicate with each other we need to define the network ports for each one. As defined in the documentation, there are 3 scopes to specify the ports:
+In order for the containers of the application to communicate with each other swe need to define the network ports for each one. As defined in the documentation, there are 3 scopes to specify the ports:
 
 - internal allows communication between containers within the same Acorn app
 - expose allows communication between containers within the cluster
 - publish allows containers to be reached from outside of the cluster
 
-As vote, result, redis and db microservices only need to be reachable from other containers within the same application, we use the default internal scope for each of them.
+As *vote*, *result*, *redis* and *db* microservices only need to be reachable from other containers within the same application, we use the default internal scope for each of them.
 
-As vote-ui and result-ui need to be reachable from the outside world we use the publish scope for both of them.
+As *voteui* and *resultui* need to be reachable from the outside world we use the publish scope for both of them.
 
 Make sure your Acornfile now looks as follows:
 
@@ -201,13 +201,13 @@ Run the VotingApp using Acorn cli:
 acorn run -n vote .
 ```
 
-It takes a couple of minutes for the application to be up and running (all the containers will be built first). When it’s ready you should be returned the http endpoints on the *acorn.io* domain for both vote-ui and result-ui containers:
+It takes a couple of minutes for the application to be up and running (all the containers will be built first). When it’s ready you should be returned the http endpoints (on the *acorn.io* domain) to access both *voteui* and *resultui* containers.
 
 Your endpoints should have the same format as the following ones (the identifiers will be different though):
 
-- vote-ui : http://voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+- voteui : http://voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
 
-- result-ui: http://resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+- resultui: http://resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
@@ -245,7 +245,7 @@ SECRETS:
 ALIAS     NAME      TYPE      KEYS      CREATED
 ```
 
-The application’s containers have been created and exposed. Currently there are no secrets nor volumes as we did not defined those top level elements in the Acornfile (yet).
+The application’s containers have been created and exposed. Currently there are no secrets nor volumes as we did not define those top level elements in the Acornfile (yet).
 
 <details>
   <summary markdown="span">If you are curious about...</summary>
@@ -305,7 +305,7 @@ replicaset.apps/result-597866986d     1         1         1       2m53s
 replicaset.apps/db-5c889d664d         1         1         1       2m53s
 ```
 
-On top of that, an Ingress resource has been created so the web interfaces (vote-ui and result-ui) can be exposed through the cluster’s Ingress Controller (Traefik in our setup):
+On top of that, an Ingress resource has been created so the web interfaces (*voteui* and *resultui*) can be exposed through the cluster’s Ingress Controller (Traefik in our setup):
 
 ```
 $ kubectl get ingress -n vote-df018e5a-eef

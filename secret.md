@@ -1,4 +1,4 @@
-In the previous step we described the Voting App in an Acornfile and ran it. As a reminder, we ended up with the following Acornfile:
+In the previous step we described the VotingApp in an Acornfile and ran it.  As a reminder, we ended up with the following Acornfile:
 
 ```
 containers: {
@@ -51,7 +51,7 @@ containers: {
 }
 ```
 
-If you look at how the username and password are provided to the db container, and to the other containers that need to connect to it, you’ll notice this is not clean nor secure because those credentials are in plain text in each container. In this step we will improve the Acornfile using Acorn secrets.
+If you look at how the username and password are provided to the *db* container, and to the other containers that need to connect to it, you’ll notice this is not clean nor secure because those credentials are in plain text in each container. In this step we will improve the Acornfile using Acorn secrets.
 
 ## About Acorn secrets
 
@@ -83,13 +83,13 @@ secrets: {
 
 It defines a secret named *pg-creds*, of type basic, with the value *postgres* set for both the username and password properties.
 
-Next, reference the secret’s username and password into the worker, db and result containers. To do so use the following syntax :
+Next, reference the secret’s username and password into the *worker*, *db* and *result* containers. To do so use the following syntax :
 
 ```
 secrets://SECRET_NAME/PROPERTY_NAME
 ```
 
-For instance, the new definition of the db container is as follows (the same changes need be done for the worker and result containers):
+For instance, the new definition of the *db* container is as follows (the same changes need be done for the *worker* and *result* containers):
 
 ```
   db: {
@@ -104,7 +104,7 @@ For instance, the new definition of the db container is as follows (the same cha
 
 The Acornfile is slightly better now because the secret is defined once and then referenced in the containers which need it. But, the credentials are still in plain text in the definition of the secret, which is what we’d like to avoid.
 
-Secrets of type Basic or Token have a special feature which allows the auto generation of values in case they are not provided. From the VotingApp perspective we need to define credentials for the db container and make sure both worker and result containers can connect to it, but we don’t need to have access to those credentials externally. In the definition of the secret we can then empty both username and password:
+Secrets of type Basic or Token have a special feature which allows the auto generation of values in case they are not provided. From the VotingApp perspective we need to define credentials for the *db* container and make sure both *worker* and *result* containers can connect to it, but we don’t need to have access to those credentials externally. In the definition of the secret we can then empty both username and password:
 
 ```
 secrets: {
@@ -187,11 +187,17 @@ Run the app using this new version of the Acornfile:
 acorn run -n vote .
 ```
 
-After a couple of minutes you will get http endpoints (different from the ones you got in the previous step) to access both vote-ui and result-ui interfaces.
+Note: if the app is already running you can use the following command to update it:
 
-- vote-ui : http://voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+```
+acorn run -n vote --update .
+```
 
-- result-ui: http://resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+After a couple of minutes you will get http endpoints (different from the ones you got in the previous step) to access both *voteui* and *resultui* containers:
+
+- voteui : http://voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+
+- resultui: http://resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
@@ -220,13 +226,6 @@ NAME                         TYPE                             DATA   AGE
 db-creds                     secrets.acorn.io/basic           2      3m56s
 ```
 </details>
-
-You can now remove the application and the associated secret:
-
-```
-acorn rm vote
-acorn rm -s db-creds
-```
 
 There are cases where we want to create a secret externally, this is what we will explore in the next part.
 
@@ -319,21 +318,19 @@ server:
   version: v0.4.0+f717d41a
 ```
 
-We can then provide the db credential through this encrypted secret to the db, worker and result containers. For that purpose we use the *-s* flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.
+We can then provide the db credential through this encrypted secret to the *db*, *worker* and *result* containers. For that purpose we use the *-s* flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.
 
 We can now run the application and make sure it uses the external postgres-credentials secret with the following command:
 
 ```
-acorn run -n vote -s postgres-credentials:db-creds .
+acorn run -n vote -s postgres-credentials:db-creds --update .
 ```
 
 As we’ve done previously we could verify the app is working fine and then vote for our favorite pet.
 
 Note: you can find more information about secrets in [the official documentation](https://docs.acorn.io/authoring/secrets)
 
-## Summary
-
-In this section we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secrets created from the command line instead. We focused on the connection to the db container but we could use the same approach to secure the connection to redis. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls in a configuration file.
+In this step we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secrets created from the command line instead. We focused on the connection to the *db* container but we could use the same approach to secure the connection to *redis*. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls in a configuration file.
 
 [Previous](./acornfile.md)  
 [Next](./volumes.md)

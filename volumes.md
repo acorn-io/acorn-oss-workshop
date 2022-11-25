@@ -1,4 +1,4 @@
-In the previous step we enhanced the Acornfile of the VotingApp and added Acorn secrets inside of it. In this step we will add a storage definition for both redis and Postgres containers so we can persist their data. As a reminder, we ended up with the following Acornfile:
+In the previous step we enhanced the Acornfile of the VotingApp and added Acorn secrets inside of it. In this step we will add a storage definition for both *redis* and *db* containers so we can persist their data. As a reminder, we ended up with the following Acornfile:
 
 ```
 containers: {
@@ -61,7 +61,7 @@ secrets: {
 }
 ```
 
-Both db and redis containers are databases but as we didn’t specify any storage related properties, the data of each container are stored in their own file system. This is usually fine in a development environment but definitely not what we want in production. 
+Both *db* and *redis* containers are databases but as we didn’t specify any storage related properties, the data of each container are stored in their own file system. This is usually fine in a development environment but definitely not what we want in production. 
 
 To ensure data is persisted for both containers we will use Acorn volumes (under the hood this is an abstraction above Kubernetes PersistentVolume resource type).
 
@@ -80,13 +80,13 @@ volumes: {
 }
 ```
 
-Note: by default a volume is created using the *default* StorageClass, a size of 10G and a "readWriteOnce" access mode. This can be customized to one needs using dedicated properties. 
+Note: by default a volume is created using the *default* StorageClass, a size of *10G* and a "readWriteOnce" access mode. This can be customized to one needs using dedicated properties. 
 
 Once defined in the *volumes* top level key, we need to mount each volumes in the corresponding container knowing that:
 - postgres persists its data in */var/lib/postgresql/data*
 - redis persists its data in */data*
 
-The *db* container could then be modified into:
+The *db* container could then be changed as follows:
 
 ```
   db: {
@@ -102,7 +102,7 @@ The *db* container could then be modified into:
   }
 ```
 
-the *redis* one into:
+the *redis* one as follows:
 
 ```
 redis: {
@@ -192,10 +192,10 @@ volumes: {
 }
 ```
 
-Run the application using this new version of the Acornfile:
+Update the application using this new version of the Acornfile:
 
 ```
-acorn run -n vote .
+acorn run -n vote --update .
 ```
 
 As in the previous step, you should be returned the http endpoints used to access both vote-ui and result-ui frontend. 
@@ -217,7 +217,7 @@ pvc-9591c7bc-71bb-4e12-8fba-4544ba021ffe   10G        RWO            Retain     
 Note: from the cli it's possible to specify the caracteristics of a volume already defined in the Acornfile. For instance, to run the application you could have run the following command specifying 200M of storage for each volume (instead of the 100M specified in the Acornfile):
 
 ```
-acorn run -n vote -v db,size=200M -v redis,size=200M .
+acorn run -n vote -v db,size=200M -v redis,size=200M --update .
 ```
 
 Note: you can find more information about volumes in [the official documentation](https://docs.acorn.io/running/volumes)

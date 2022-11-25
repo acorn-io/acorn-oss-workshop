@@ -4,7 +4,7 @@ In the previous step we enhanced the Acornfile of the VotingApp defining volumes
 
 In development mode, Acorn allows to make changes to the source code and see it updated inside the app containers in real time. In this mode Acorn will watch the local directory for changes and synchronize them to the running Acorn app. To activate the development mode we need to use the *-i* flag when running the app as you will do in a bit.
 
-In this step we will focus on the result microservice which is developed with *Node.js*. If you have a look into the folder containing the application code, you will see the following Dockerfile where 2 targets are defined: the second one is named *dev*, the second one *production*:
+In this step we will focus on the *result* microservice which is developed with *Node.js*. If you have a look into the folder containing the application code, you will see 2 build targets are defined in the Dockerfile: the first one is named *dev*, the second one *production*:
 
 ```
 FROM node:18.12.1-slim as base
@@ -23,8 +23,8 @@ RUN npm ci
 CMD ["npm", "run", "dev"]
 ```
 
-- when the image is built for the *dev* target, the command "npm run dev" runs *nodemon* under the hood. nodemon is a process which watches the code changes and is able to relaunch the application when changes occur in the container filesystem
-- when the image is built for the *production* target, the command "npm start" runs the standard node binary to run the application. No hot reload is possible in that case
+- when the image is built for the *dev* target, the command ```npm run dev``` runs *nodemon* under the hood. nodemon is a process which watches the code changes and which is able to relaunch the application
+- when the image is built for the *production* target, the command ```npm start``` runs the standard node binary. No hot reload is possible in that case
 
 Before running the Acorn application in development mode we need to modify the Acornfile is bit to make sure that if the dev mode is detected:
 - the code folder of the result microservice is mounted into the */app* folder within the container
@@ -57,17 +57,17 @@ result: {
 }
 ```
 
-You can now stop the application (if it was already running) and run it in development mode:
+You can now update the application running it in development mode:
 
 ```
-acorn run -n vote -i .
+acorn run -n vote -i --update .
 ```
 
-note: in development mode you'll notice that the logs of each containers are streamed in the console.
+note: in development mode you'll notice that the logs of each containers are streamed to the console
 
 Once the application is up and running you can modify the *server.js* file located in the *result* folder and see that changes automatically been taken into account making the container's process to restart.
 
-Below is an example of logs we can get for the result service following a change in server.js:
+Below is an example of logs you can get for the result service following a change in server.js:
 
 ```
 result-f4fd75fb5-66mjc: (sync): Upstream - Handling 2 removes
@@ -92,7 +92,7 @@ As an additional exercise, change the Acornfile modifying the definition of the 
 <details>
   <summary markdown="span">Solution</summary>
 
-To work with the development mode, the definition of the *vote* container can be modified as follows:
+To work in development mode, the definition of the *vote* container can be modified as follows:
 
 ```
 vote: {
@@ -118,7 +118,7 @@ vote: {
 
 </details>
 
-We could also do the same with *vote-ui* and *result-ui* containers.
+We could also do the same with *voteui* and *resultui* containers.
 
 Note: you can find more information about development mode in [the official documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
 
