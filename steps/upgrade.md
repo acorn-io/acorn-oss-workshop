@@ -75,4 +75,4 @@ Using the http endpoint of the *voteui* container you should now see the new col
 Each time a newer SemVer tag is pushed to the registry the application will be upgraded with the new image.
 
 [Previous](./acorn_image.md)  
-[Next](./development_mode.md)
+[Next](./congrats.md)

@@ -4,5 +4,5 @@ Congratulation, you've just finished this Acorn introductory workshop !!!
 
 Feel free to explore the [official Acorn documentation](https://docs.acorn.io/) to know more about Acorn's features and all the Acornfile's subtleties.
 
-[Previous](./profiles.md)  
+[Previous](./upgrade.md)  
 [Back to Home](../README.md)
