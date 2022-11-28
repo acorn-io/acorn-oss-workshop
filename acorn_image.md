@@ -33,4 +33,4 @@ acorn run -n vote docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.0 .
 ```
 
 [Previous](./volumes.md)  
-[Next](./development_mode.md)
+[Next](./upgrade.md)

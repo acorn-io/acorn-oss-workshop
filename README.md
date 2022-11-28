@@ -15,6 +15,7 @@ We will follow the steps below:
 - [Use secret to secure connection to the db](./secret.md)
 - [Use volumes to persist data](./volumes.md)
 - [Build an distribute the application as an Acorn image](./acorn_image.md)
+- [Upgrade the application](./upgrade.md)  
 - [Development mode](./development_mode.md)  
 - [Adding a router](./router.md)  
 - [Introduction to args and profile](./profiles.md)  

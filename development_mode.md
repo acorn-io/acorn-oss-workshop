@@ -122,5 +122,5 @@ We could also do the same with *voteui* and *resultui* containers.
 
 Note: you can find more information about development mode in [the official documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
 
-[Previous](./acorn_image.md)  
+[Previous](./upgrade.md)  
 [Next](./router.md)
