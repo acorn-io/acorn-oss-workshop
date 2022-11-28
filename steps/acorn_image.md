@@ -1,4 +1,5 @@
-The VotingApp is now defined in an Acornfile specifying the application's container, a secret to connect to the db container, and volumes to persist data for both db and redis container. We will use another feature of Acorn which allows us to package the app as a single artifact and push it to the Docker Hub.
+The VotingApp is now defined in an Acornfile specifying the application's container, a secret to connect to the db container abd volumes to persist data for both db and redis container. We also added a couple of labels to the whole application.  
+We will use another feature of Acorn which allows us to package the app as a single artifact and push it to an OCi registry ([DockerHub](https://hub.docker.com]) in this example).
 
 ## Publishing to Docker Hub
 
@@ -32,5 +33,5 @@ Your version of the VotingApp is now available in the DockerHub and it can be us
 acorn run -n vote docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.0 .
 ```
 
-[Previous](./volumes.md)  
+[Previous](./labels.md)  
 [Next](./upgrade.md)

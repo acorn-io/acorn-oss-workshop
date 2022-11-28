@@ -68,4 +68,4 @@ We only used the *voteui* container to illustrate the usage of args / profile bu
 Note: you can find more information about Arguments and Profiles in [the official documentation](https://docs.acorn.io/authoring/args-and-profiles)
 
 [Previous](./router.md)  
-[Next](./congrats.md)
+[Next](./labels.md)

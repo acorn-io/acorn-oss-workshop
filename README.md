@@ -18,7 +18,8 @@ We will follow the steps below:
 - [Upgrade the application](./steps/upgrade.md)  
 - [Development mode](./steps/development_mode.md)  
 - [Adding a router](./steps/router.md)  
-- [Introduction to args and profile](./steps/profiles.md)  
+- [Introduction to args and profile](./steps/profiles.md) 
+- [Adding labels](./steps/labels.md) 
 
 [Let's get started](./steps/acorn.md)
 

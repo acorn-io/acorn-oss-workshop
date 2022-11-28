@@ -11,9 +11,16 @@ profiles: {
     }
 }
 
+labels: {
+    application: "votingapp"
+}
+
 containers: {
   
   voteui: {
+    labels: {
+      component: "voteui"
+    }
     if args.dev {
       dirs: "/usr/share/nginx/html": "./vote-ui"
     }
@@ -25,6 +32,9 @@ containers: {
   }
 
   vote: {
+    labels: {
+      component: "vote"
+    }
     if args.dev {
       build: {
         target: "dev"
@@ -44,6 +54,9 @@ containers: {
   }
 
   redis: {
+    labels: {
+      component: "redis"
+    }
     image: "redis:7.0.5-alpine3.16"
     ports: "6379/tcp"
     dirs: {
@@ -52,6 +65,9 @@ containers: {
   }
 
   worker: {
+    labels: {
+      component: "worker"
+    }
     build: "./worker/go"
     env: {
      "POSTGRES_USER": "secret://db-creds/username"
@@ -60,6 +76,9 @@ containers: {
   }
 
   db: {
+    labels: {
+      component: "db"
+    }
     image: "postgres:15.0-alpine3.16"
     ports: "5432/tcp"
     env: {
@@ -72,6 +91,9 @@ containers: {
   }
 
   result: {
+    labels: {
+      component: "result"
+    }
     if args.dev {
       build: {
         target: "dev"
@@ -93,6 +115,9 @@ containers: {
   }
 
   resultui: {
+    labels: {
+      component: "resultui"
+    }
     if args.dev {
       build: {
         target: "dev"
