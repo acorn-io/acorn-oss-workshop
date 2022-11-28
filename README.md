@@ -14,12 +14,12 @@ We will follow the steps below:
 - [Write your first Acornfile](./steps/acornfile.md)
 - [Use secret to secure connection to the db](./steps/secret.md)
 - [Use volumes to persist data](./steps/volumes.md)
-- [Build an distribute the application as an Acorn image](./steps/acorn_image.md)
-- [Upgrade the application](./steps/upgrade.md)  
 - [Development mode](./steps/development_mode.md)  
 - [Adding a router](./steps/router.md)  
 - [Introduction to args and profile](./steps/profiles.md) 
-- [Adding labels](./steps/labels.md) 
+- [Adding labels](./steps/labels.md)  
+- [Build an distribute the application as an Acorn image](./steps/acorn_image.md)
+- [Upgrade the application](./steps/upgrade.md)  
 
 [Let's get started](./steps/acorn.md)
 
