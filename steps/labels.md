@@ -29,7 +29,7 @@ Next modify the definition of each container adding a new label property with *c
 Once you've added the new label for each container, update the application:
 
 ```
-acorn run -n vote  .
+acorn run -n vote --update  .
 ```
 
 Under the hood this will add the specified labels on the application's resources.
