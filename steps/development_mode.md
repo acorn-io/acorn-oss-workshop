@@ -34,21 +34,15 @@ Modify the definition of the *result* container so it looks as follows:
 
 ```
 result: {
+  build: {
+    target: std.ifelse(args.dev, "dev", "production")
+    context: "./result"
+  }
   if args.dev {
-    build: {
-      target: "dev"
-      context: "./result"
-    }
     dirs: {
         "/app": "./result"
     }
-  } 
-  if !args.dev {
-    build: {
-      target: "production"
-      context: "./result"
-    }
-  }  
+  }   
   ports: "5000/http"
   env: {
      "POSTGRES_USER": "secret://db-creds/username"
@@ -56,6 +50,8 @@ result: {
   }
 }
 ```
+
+Note: Acorn provides many useful functions such as the *std.ifelse*, an helper to perform an if...else...end statement on a single line
 
 You can now update the application running it in development mode:
 
@@ -87,33 +83,57 @@ result-f4fd75fb5-66mjc: new socket.io connection
 
 We only show the development mode for the *result* microservice but the same principles would apply for the other microservices as well. 
 
-As an additional exercise, change the Acornfile modifying the definition of the *vote* container to ensure the development mode is working fine for that one as well (the *vote* microservice is a Python flask application).
+As an additional exercise, change the Acornfile modifying the definition of the *voteui*, *vote* and *result-ui* containers to ensure the development mode is working fine for those ones as well.
 
 <details>
   <summary markdown="span">Solution</summary>
 
-To work in development mode, the definition of the *vote* container can be modified as follows:
+To work in development mode, the definition of the *result-ui*, *vote-ui* and *vote* containers can be modified as follows:
 
 ```
-vote: {
+voteui: {
   if args.dev {
-      build: {
-        target: "dev"
-        context: "./vote"
-      }
-      dirs: {
-          "/app": "./vote"
-      }
-    } 
-    if !args.dev {
-      build: {
-        target: "production"
-        context: "./vote"
-      }
-    }  
-    ports: "5000/http"
+    dirs: {
+      "/usr/share/nginx/html": "./vote-ui"
+    }
   }
+  build: {
+    context: "./vote-ui"
+  }
+  ports: publish : "80/http"
 }
+
+vote: {
+  build: {
+    target: std.ifelse(args.dev, "dev", "production")
+    context: "./vote"
+  }
+  if args.dev {
+    dirs: {
+        "/app": "./vote"
+    }
+  }
+  ports: "5000/http"
+}
+
+resultui: {
+  build: {
+    target: std.ifelse(args.dev, "dev", "static")
+    context: "./result-ui"
+  }
+  if args.dev {
+    dirs: {
+      "/app": "./result-ui"
+    }
+  } 
+  ports: publish : "80/http"
+}
+```
+
+Once you have modified the Acornfile you can update the application one more time:
+
+```
+acorn run -n vote -i --update . 
 ```
 
 </details>

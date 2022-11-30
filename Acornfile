@@ -22,7 +22,9 @@ containers: {
       component: "voteui"
     }
     if args.dev {
-      dirs: "/usr/share/nginx/html": "./vote-ui"
+      dirs: {
+        "/usr/share/nginx/html": "./vote-ui"
+      }
     }
     build: {
       context: "./vote-ui"
@@ -35,19 +37,13 @@ containers: {
     labels: {
       component: "vote"
     }
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./vote"
+    }
     if args.dev {
-      build: {
-        target: "dev"
-        context: "./vote"
-      }
       dirs: {
           "/app": "./vote"
-      }
-    }
-    if !args.dev {
-      build: {
-        target: "production"
-        context: "./vote"
       }
     }
     ports: "5000/http"
@@ -86,7 +82,7 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
     dirs: {
-      "/var/lib/postgresql/data*": "volume://db"
+      "/var/lib/postgresql/data": "volume://db"
     }
   }
 
@@ -94,17 +90,13 @@ containers: {
     labels: {
       component: "result"
     }
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./result"
+    }
     if args.dev {
-      build: {
-        target: "dev"
-        context: "./result"
-      }
-      dirs: "/app": "./result"
-    } 
-    if !args.dev {
-      build: {
-        target: "production"
-        context: "./result"
+      dirs: {
+        "/app": "./result"
       }
     }  
     ports: "5000/http"
@@ -118,19 +110,15 @@ containers: {
     labels: {
       component: "resultui"
     }
-    if args.dev {
-      build: {
-        target: "dev"
-        context: "./result-ui"
-      }
-      dirs: "/app": "./result-ui"
-    } 
-    if !args.dev {
-      build: {
-        target: "static"
-        context: "./result-ui"
-      }
+    build: {
+      target: std.ifelse(args.dev, "dev", "static")
+      context: "./result-ui"
     }
+    if args.dev {
+      dirs: {
+        "/app": "./result-ui"
+      }
+    } 
     ports: publish : "80/http"
   }
 }
