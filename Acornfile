@@ -141,20 +141,3 @@ volumes: {
       size: "100M"
   }
 }
-
-routers: {
-  voting: {
-    routes: {
-        "/vote": {
-            pathType: "prefix"
-            targetServiceName: "voteui"
-            targetPort: 80
-        }
-        "/result": {
-            pathType: "prefix"
-            targetServiceName: "resultui"
-            targetPort: 80
-        }
-    }
-  }
-}

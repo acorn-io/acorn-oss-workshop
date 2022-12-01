@@ -16,7 +16,7 @@ In order to create a local VM, you can use [Multipass](https://multipass.run), i
 The following command launch a VM named k3s with a couple of additional options:
 
 ```
-multipass launch -n k3s -c 2 -d 15G -m 2G
+multipass launch -n k3s -c 4 -d 20G -m 4G
 ```
 
 #### Cloud provider
