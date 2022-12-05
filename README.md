@@ -24,5 +24,5 @@ We will follow the steps below:
 
 ## Status
 
-The content of this worshop is still a work in progress, all the steps might not be fully documented. Additional content will come soon.    
+The content of this worshop is still a work in progress, additional content will come soon.    
 Feedback are more than welcome.
