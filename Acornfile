@@ -56,7 +56,9 @@ containers: {
     image: "redis:7.0.5-alpine3.16"
     ports: "6379/tcp"
     dirs: {
-      "/data": "volume://redis"
+      if !args.dev {
+        "/data": "volume://redis"
+      }
     }
   }
 
@@ -82,7 +84,9 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
     dirs: {
-      "/var/lib/postgresql/data": "volume://db"
+      if !args.dev {
+        "/var/lib/postgresql/data": "volume://db"
+      }
     }
   }
 
@@ -111,7 +115,7 @@ containers: {
       component: "resultui"
     }
     build: {
-      target: std.ifelse(args.dev, "dev", "static")
+      target: std.ifelse(args.dev, "dev", "production")
       context: "./result-ui"
     }
     if args.dev {
@@ -134,10 +138,12 @@ secrets: {
 }
 
 volumes: {
-  "db": {
-      size: "100M"
-  }
-  "redis": {
-      size: "100M"
+  if !args.dev {
+    "db": {
+        size: "100M"
+    }
+    "redis": {
+        size: "100M"
+    }
   }
 }

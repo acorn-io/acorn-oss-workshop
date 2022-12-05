@@ -51,7 +51,7 @@ result: {
 }
 ```
 
-Note: Acorn provides many useful functions such as the *std.ifelse*, an helper to perform an if...else...end statement on a single line
+Note: Acorn provides many useful functions such as the *std.ifelse*, an helper to perform an if...else...end statement on a single line. All the function available are listed in the [function library documentation](https://docs.acorn.io/reference/functions)
 
 You can now update the application running it in development mode:
 
@@ -83,7 +83,7 @@ result-f4fd75fb5-66mjc: new socket.io connection
 
 We only show the development mode for the *result* microservice but the same principles would apply for the other microservices as well. 
 
-As an additional exercise, change the Acornfile modifying the definition of the *voteui*, *vote* and *result-ui* containers to ensure the development mode is working fine for those ones as well.
+Change the Acornfile modifying the definition of the *voteui*, *vote* and *result-ui* containers to ensure the development mode is working fine for those ones as well.
 
 <details>
   <summary markdown="span">Solution</summary>
@@ -118,7 +118,7 @@ vote: {
 
 resultui: {
   build: {
-    target: std.ifelse(args.dev, "dev", "static")
+    target: std.ifelse(args.dev, "dev", "production")
     context: "./result-ui"
   }
   if args.dev {
@@ -138,7 +138,61 @@ acorn run -n vote -i --update .
 
 </details>
 
-We could also do the same with *voteui* and *resultui* containers.
+We can go one step further and make sure volumes are not used when the app is run in development mode.  
+In order to do that we need to:
+
+- add a condition in the *volumes* key so that no volumes are created in dev mode:
+
+```
+volumes: {
+  if !args.dev {
+    "db": {
+        size: "100M"
+    }
+    "redis": {
+        size: "100M"
+    }
+  }
+}
+```
+
+- add a condition in *redis* container so content of */data* is not persisted in a volume while in dev mode:
+
+```
+redis: {
+  labels: {
+    component: "redis"
+  }
+  image: "redis:7.0.5-alpine3.16"
+  ports: "6379/tcp"
+  dirs: {
+    if !args.dev {
+      "/data": "volume://redis"
+    }
+  }
+}
+```
+
+- add a condition in *db* container so content of */var/lib/postgresql/data* is not persisted in a volume while in dev mode:
+
+```
+db: {
+  labels: {
+    component: "db"
+  }
+  image: "postgres:15.0-alpine3.16"
+  ports: "5432/tcp"
+  env: {
+    "POSTGRES_USER": "secret://db-creds/username"
+    "POSTGRES_PASSWORD": "secret://db-creds/password"
+  }
+  dirs: {
+    if !args.dev {
+      "/var/lib/postgresql/data": "volume://db"
+    }
+  }
+}
+```
 
 Note: you can find more information about development mode in [the official documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
 
