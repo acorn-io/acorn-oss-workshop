@@ -1,10 +1,10 @@
-In the previous step we enhanced the Acornfile of the VotingApp defining volumes for both db and redis containers. In this step we will use Acorn's development mode which eases the development workflow.
+In the previous step we enhanced the Acornfile of the VotingApp defining volumes for both *db* and *redis* containers. In this step we will use Acorn's development mode which eases the development workflow.
 
 ## About development mode
 
 In development mode, Acorn allows to make changes to the source code and see it updated inside the app containers in real time. In this mode Acorn will watch the local directory for changes and synchronize them to the running Acorn app. To activate the development mode we need to use the *-i* flag when running the app as you will do in a bit.
 
-In this step we will focus on the *result* microservice which is developed with *Node.js*. If you have a look into the folder containing the application code, you will see 2 build targets are defined in the Dockerfile: the first one is named *dev*, the second one *production*:
+In this step we will focus on the *result* microservice which is developed with *Node.Js*. If you have a look into the folder containing the application code, you will see 2 build targets are defined in the Dockerfile: the first one is named *dev*, the second one *production*:
 
 ```
 FROM node:18.12.1-slim as base
@@ -26,7 +26,7 @@ CMD ["npm", "run", "dev"]
 - when the image is built for the *dev* target, the command ```npm run dev``` runs *nodemon* under the hood. nodemon is a process which watches the code changes and which is able to relaunch the application
 - when the image is built for the *production* target, the command ```npm start``` runs the standard node binary. No hot reload is possible in that case
 
-Before running the Acorn application in development mode we need to modify the Acornfile is bit to make sure that if the dev mode is detected:
+Before running the Acorn application in development mode we need to modify the Acornfile is bit to make sure if the dev mode is detected:
 - the code folder of the result microservice is mounted into the */app* folder within the container
 - the build is done against the *dev* target, this will ensure nodemon is the main process running in the result container thus making hot reload possible
 
@@ -56,7 +56,7 @@ Note: Acorn provides many useful functions such as the *std.ifelse*, an helper t
 You can now update the application running it in development mode:
 
 ```
-acorn run -n vote -i --update .
+acorn run -n vote -i .
 ```
 
 note: in development mode you'll notice that the logs of each containers are streamed to the console
@@ -83,12 +83,9 @@ result-f4fd75fb5-66mjc: new socket.io connection
 
 We only show the development mode for the *result* microservice but the same principles would apply for the other microservices as well. 
 
-Change the Acornfile modifying the definition of the *voteui*, *vote* and *result-ui* containers to ensure the development mode is working fine for those ones as well.
+Change the Acornfile modifying the definition of the *voteui*, *vote* and *result-ui* containers to ensure the development mode is working fine for those ones as well:
 
-<details>
-  <summary markdown="span">Solution</summary>
-
-To work in development mode, the definition of the *result-ui*, *vote-ui* and *vote* containers can be modified as follows:
+- voteui:
 
 ```
 voteui: {
@@ -102,7 +99,11 @@ voteui: {
   }
   ports: publish : "80/http"
 }
+```
 
+- vote:
+
+```
 vote: {
   build: {
     target: std.ifelse(args.dev, "dev", "production")
@@ -115,7 +116,11 @@ vote: {
   }
   ports: "5000/http"
 }
+```
 
+- resultui:
+
+```
 resultui: {
   build: {
     target: std.ifelse(args.dev, "dev", "production")
@@ -133,10 +138,8 @@ resultui: {
 Once you have modified the Acornfile you can update the application one more time:
 
 ```
-acorn run -n vote -i --update . 
+acorn run -n vote -i . 
 ```
-
-</details>
 
 We can go one step further and make sure volumes are not used when the app is run in development mode.  
 In order to do that we need to:
@@ -193,6 +196,115 @@ db: {
   }
 }
 ```
+
+Make sure the VotingApp is working fine in development mode using this new version of the Acornfile. 
+
+<details>
+  <summary markdown="span">Acornfile you should have at the end of this step...</summary>
+<pre>
+containers: {
+  voteui: {
+    if args.dev {
+      dirs: {
+        "/usr/share/nginx/html": "./vote-ui"
+      }
+    }
+    build: {
+      context: "./vote-ui"
+    }
+    ports: publish : "80/http"
+  }
+  vote: {
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./vote"
+    }
+    if args.dev {
+      dirs: {
+          "/app": "./vote"
+      }
+    }
+    ports: "5000/http"
+  }
+  redis: {
+    image: "redis:7.0.5-alpine3.16"
+    ports: "6379/tcp"
+    dirs: {
+      if !args.dev {
+        "/data": "volume://redis"
+      }
+    }
+  }
+  worker: {
+    build: "./worker/go"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+  }
+  db: {
+    image: "postgres:15.0-alpine3.16"
+    ports: "5432/tcp"
+    env: {
+      "POSTGRES_USER": "secret://db-creds/username"
+      "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+    dirs: {
+      if !args.dev {
+        "/var/lib/postgresql/data": "volume://db"
+      }
+    }
+  }
+  result: {
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./result"
+    }
+    if args.dev {
+      dirs: {
+          "/app": "./result"
+      }
+    }   
+    ports: "5000/http"
+    env: {
+      "POSTGRES_USER": "secret://db-creds/username"
+      "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+  }
+  resultui: {
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./result-ui"
+    }
+    if args.dev {
+      dirs: {
+        "/app": "./result-ui"
+      }
+    } 
+    ports: publish : "80/http"
+  }
+}
+secrets: {
+    "db-creds": {
+        type: "basic"
+        data: {
+            username: ""
+            password: ""
+        }
+    }
+}
+volumes: {
+  if !args.dev {
+    "db": {
+        size: "100M"
+    }
+    "redis": {
+        size: "100M"
+    }
+  }
+}
+</pre>
+</details>
 
 Note: you can find more information about development mode in [the official documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
 

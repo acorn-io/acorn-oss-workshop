@@ -129,15 +129,15 @@ worker: {
 
 Note: in the next step we’ll show how to use Acorn secrets to avoid to specify the password in plain text
 
-In order for the containers of the application to communicate with each other swe need to define the network ports for each one. As defined in the documentation, there are 3 scopes to specify the ports:
+In order for the containers of the application to communicate with each others we need to define the network ports for each one. As defined in the documentation, there are 3 scopes to specify the ports:
 
-- internal allows communication between containers within the same Acorn app
-- expose allows communication between containers within the cluster
-- publish allows containers to be reached from outside of the cluster
+- **internal** allows communication between containers within the same Acorn app
+- **expose** allows communication between containers within the cluster
+- **publish** allows containers to be reached from outside of the cluster
 
-As *vote*, *result*, *redis* and *db* microservices only need to be reachable from other containers within the same application, we use the default internal scope for each of them.
+As *vote*, *result*, *redis* and *db* microservices only need to be reachable from other containers within the same application, we use the **internal** scope (default one) for each of them.
 
-As *voteui* and *resultui* need to be reachable from the outside world we use the publish scope for both of them.
+As *voteui* and *resultui* need to be reachable from the outside world we use the **publish** scope for both of them.
 
 Make sure your Acornfile now looks as follows:
 
@@ -191,23 +191,23 @@ result: {
 }
 ```
 
-You now have a first (minimal) version of the Acornfile which specifies the application. Let’s make sure the Voting App can be run using that one.
+You now have a first (minimal) version of the Acornfile which specifies the application. We will now use it to build and run the VotingApp.
 
 ## Testing the application
 
-Run the VotingApp using Acorn cli:
+Use the following command to run the application:
 
 ```
 acorn run -n vote .
 ```
 
-It takes a couple of minutes for the application to be up and running (all the containers will be built first). When it’s ready you should be returned the http endpoints (on the *acorn.io* domain) to access both *voteui* and *resultui* containers.
+It will take a couple of minutes for the application to be up and running (all the containers need to be built first). When it’s ready you should be returned the http endpoints (on the *acorn.io* domain) to access both *voteui* and *resultui* containers.
 
 Your endpoints should have the same format as the following ones (the identifiers will be different though):
 
-- voteui : http://voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+- voteui : http://voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io
 
-- resultui: http://resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+- resultui: http://resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
@@ -225,18 +225,18 @@ It should return a result similar to the following one:
 
 ```
 APPS:
-NAME      IMAGE          HEALTHY   UP-TO-DATE   CREATED    ENDPOINTS                                                                                                                                  MESSAGE
-vote      fd93b8cee56a   7         7            102s ago   http://resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io => resultui:80, http://voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io => voteui:80   OK
+NAME      IMAGE          HEALTHY   UP-TO-DATE   CREATED     ENDPOINTS                                                                                                                                  MESSAGE
+vote      3783c2ae5834   7         7            8m21s ago   http://resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io => resultui:80, http://voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io => voteui:80   OK
 
 CONTAINERS:
-NAME                             APP       IMAGE                                                                     STATE     RESTARTCOUNT   CREATED    MESSAGE
-vote.db-5c889d664d-jrpk9         vote      postgres:13.2-alpine                                                      running   0              101s ago
-vote.redis-69dd5f96b-q5tds       vote      redis:6.2-alpine3.13                                                      running   0              101s ago
-vote.result-597866986d-pt75z     vote      sha256:b681183b16eabcec15e7602a91f99fed952a6581b6ebb687423e2d453182c16c   running   0              101s ago
-vote.resultui-6cbdcb456d-r64w8   vote      sha256:f1eb21ca12459fcfb6593f734fc2cabc916aeabb6b1d39741974f88c188b3555   running   0              101s ago
-vote.vote-54f5b9fc8b-v9bb8       vote      sha256:46c25d82668eb381050cf28497674ac5a6e024869c3adcd13d0853ad88cfd36f   running   0              101s ago
-vote.voteui-fb6bf5685-lxmj7      vote      sha256:99efc7281e2d3b564a1aa69fd8b259e91e71efdc5d71a23ee2562a2541e7119b   running   0              101s ago
-vote.worker-66b5564f6-fxkps      vote      sha256:5eed60ebd2a755d89f7c787e6cb5056052f0c1c1e416ea22022ef74578c1be00   running   0              101s ago
+NAME                            APP       IMAGE                                                                     STATE     RESTARTCOUNT   CREATED     MESSAGE
+vote.result-594794bbfc-xqgkp    vote      sha256:18ec679d38058d97d5e0d7b101a4fe3ad01f44c228bd3abcb8f36961b8cb9d76   running   0              8m20s ago
+vote.resultui-9f6546859-f9csq   vote      sha256:a6f9230076947f698858df6793097f6b239f3eef108297e4e4d62e9b6f258d9a   running   0              8m20s ago
+vote.worker-6fd688c9cf-vf2jc    vote      sha256:f97cb92018967769330da09bba644da395c176f549e1d11bf48da3a8927cb62e   running   0              8m20s ago
+vote.db-754bb4c9bf-4cv7r        vote      postgres:13.2-alpine                                                      running   0              8m21s ago
+vote.redis-6564f9d99-mfdc4      vote      redis:6.2-alpine3.13                                                      running   0              8m21s ago
+vote.vote-b4b7dc9b9-5vftx       vote      sha256:73836e77179e1eb068d4aa54d58350c0bc2ebf32b45aab80997273278fbd2373   running   0              8m21s ago
+vote.voteui-f77bf48b6-v22kx     vote      sha256:069dcc1ab8846d2eb6e8b57d39a29f07607a477f74ecde66d0ef0e02289300d6   running   0              8m21s ago
 
 VOLUMES:
 NAME      APP-NAME   BOUND-VOLUME   CAPACITY   STATUS    ACCESS-MODES   CREATED
@@ -255,63 +255,63 @@ The application’s containers have been created and exposed. Currently there ar
 ```
 $ kubectl get ns
 NAME                STATUS   AGE
-NAME                STATUS   AGE
 default             Active   20m
 kube-system         Active   20m
 kube-public         Active   20m
 kube-node-lease     Active   20m
 acorn               Active   19m
 acorn-system        Active   19m
-vote-df018e5a-eef   Active   2m10s <- namespace created for the application
+acorn-image-system  Active   19m
+vote-81255b28-ad4   Active   2m10s <- namespace created for the application
 ```
 
 Within this namespace there are a Deployment / Pod and a Service for each microservice of the Voting App:
 
 ```
-$ kubectl get all -n vote-df018e5a-eef
-NAME                            READY   STATUS    RESTARTS   AGE
-pod/redis-69dd5f96b-q5tds       1/1     Running   0          2m53s
-pod/worker-66b5564f6-fxkps      1/1     Running   0          2m53s
-pod/resultui-6cbdcb456d-r64w8   1/1     Running   0          2m53s
-pod/voteui-fb6bf5685-lxmj7      1/1     Running   0          2m53s
-pod/vote-54f5b9fc8b-v9bb8       1/1     Running   0          2m53s
-pod/result-597866986d-pt75z     1/1     Running   0          2m53s
-pod/db-5c889d664d-jrpk9         1/1     Running   0          2m53s
+$ kubectl get all -n vote-81255b28-ad4
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/voteui-f77bf48b6-v22kx     1/1     Running   0          2m53s
+pod/redis-6564f9d99-mfdc4      1/1     Running   0          2m53s
+pod/resultui-9f6546859-f9csq   1/1     Running   0          2m53s
+pod/vote-b4b7dc9b9-5vftx       1/1     Running   0          2m53s
+pod/worker-6fd688c9cf-vf2jc    1/1     Running   0          2m53s
+pod/result-594794bbfc-xqgkp    1/1     Running   0          2m53s
+pod/db-754bb4c9bf-4cv7r        1/1     Running   0          2m53s
 
 NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/db         ClusterIP   10.43.136.35    <none>        5432/TCP   2m53s
-service/redis      ClusterIP   10.43.8.226     <none>        6379/TCP   2m53s
-service/result     ClusterIP   10.43.67.222    <none>        5000/TCP   2m53s
-service/resultui   ClusterIP   10.43.110.102   <none>        80/TCP     2m53s
-service/vote       ClusterIP   10.43.211.188   <none>        5000/TCP   2m53s
-service/voteui     ClusterIP   10.43.61.251    <none>        80/TCP     2m53s
+service/db         ClusterIP   10.43.54.204    <none>        5432/TCP   2m53s
+service/redis      ClusterIP   10.43.53.154    <none>        6379/TCP   2m53s
+service/result     ClusterIP   10.43.49.253    <none>        5000/TCP   2m53s
+service/resultui   ClusterIP   10.43.191.30    <none>        80/TCP     2m53s
+service/vote       ClusterIP   10.43.203.229   <none>        5000/TCP   2m53s
+service/voteui     ClusterIP   10.43.199.118   <none>        80/TCP     2m53s
 
 NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/redis      1/1     1            1           2m53s
-deployment.apps/worker     1/1     1            1           2m53s
-deployment.apps/resultui   1/1     1            1           2m53s
 deployment.apps/voteui     1/1     1            1           2m53s
+deployment.apps/redis      1/1     1            1           2m53s
+deployment.apps/resultui   1/1     1            1           2m53s
 deployment.apps/vote       1/1     1            1           2m53s
+deployment.apps/worker     1/1     1            1           2m53s
 deployment.apps/result     1/1     1            1           2m53s
 deployment.apps/db         1/1     1            1           2m53s
 
-NAME                                  DESIRED   CURRENT   READY   AGE
-replicaset.apps/redis-69dd5f96b       1         1         1       2m53s
-replicaset.apps/worker-66b5564f6      1         1         1       2m53s
-replicaset.apps/resultui-6cbdcb456d   1         1         1       2m53s
-replicaset.apps/voteui-fb6bf5685      1         1         1       2m53s
-replicaset.apps/vote-54f5b9fc8b       1         1         1       2m53s
-replicaset.apps/result-597866986d     1         1         1       2m53s
-replicaset.apps/db-5c889d664d         1         1         1       2m53s
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/voteui-f77bf48b6     1         1         1       2m53s
+replicaset.apps/redis-6564f9d99      1         1         1       2m53s
+replicaset.apps/resultui-9f6546859   1         1         1       2m53s
+replicaset.apps/vote-b4b7dc9b9       1         1         1       2m53s
+replicaset.apps/worker-6fd688c9cf    1         1         1       2m53s
+replicaset.apps/result-594794bbfc    1         1         1       2m53s
+replicaset.apps/db-754bb4c9bf        1         1         1       2m53s
 ```
 
 On top of that, an Ingress resource has been created so the web interfaces (*voteui* and *resultui*) can be exposed through the cluster’s Ingress Controller (Traefik in our setup):
 
 ```
-$ kubectl get ingress -n vote-df018e5a-eef
-NAME       CLASS    HOSTS                                             ADDRESS         PORTS   AGE
-resultui   <none>   resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io   192.168.205.2   80      3m41s
-voteui     <none>   voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io     192.168.205.2   80      3m41s
+$ kubectl get ingress -n vote-81255b28-ad4
+NAME       CLASS     HOSTS                                             ADDRESS          PORTS   AGE
+voteui     traefik   voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io     89.145.160.110   80      3m41s
+resultui   traefik   resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io   89.145.160.110   80      3m41s
 ```
 </details>
 
@@ -326,6 +326,53 @@ Wait a couple of seconds and make sure the list of acorn resources is now empty:
 ```
 acorn all
 ```
+
+<details>
+  <summary markdown="span">Acornfile you should have at the end of this step...</summary>
+<pre>
+containers: {
+  voteui: {
+    build: "./vote-ui"
+    ports: publish : "80/http"
+  }
+  vote: {
+    build: "./vote"
+    ports: "5000/tcp"
+  }
+  redis: {
+    image: "redis:6.2-alpine3.13"
+    ports: "6379/tcp"
+  }
+  worker: {
+    build: "./worker/go"
+    env: {
+      "POSTGRES_USER": "postgres"
+      "POSTGRES_PASSWORD": "postgres"
+    }
+  }
+  db: {
+    image: "postgres:13.2-alpine"
+    ports: "5432/tcp"
+    env: {
+      "POSTGRES_USER": "postgres"
+      "POSTGRES_PASSWORD": "postgres"
+    }
+  }
+  result: {
+    build: "./result"
+    ports: "5000/http"
+    env: {
+      "POSTGRES_USER": "postgres"
+      "POSTGRES_PASSWORD": "postgres"
+    }
+  }
+  resultui: {
+    build: "./result-ui"
+    ports: publish : "80/http"
+  }
+}
+</pre>
+</details>
 
 Note: you can find more information about Acornfile in [Authoring Acornfile](https://docs.acorn.io/authoring)
 

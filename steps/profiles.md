@@ -26,7 +26,7 @@ The change above defines a default value for the *replicas* value. It also ensur
 Next modify the definition of the *voteui* container so it looks as follows, the number of *voteui* containers now depends on the value of the *replicas* arguments:
 
 ```
-voteui: {
+  voteui: {
     if args.dev {
       dirs: "/usr/share/nginx/html": "./vote-ui"
     } 
@@ -47,6 +47,20 @@ acorn run -n vote --update .
 
 Note: you can verify the running containers with ```acorn all``` (which lists all the Acorn resources) or with ```acorn containers``` (which only lists containers)
 
+```
+$ acorn containers
+NAME                             APP       IMAGE                                                                     STATE     RESTARTCOUNT   CREATED   MESSAGE
+vote.db-54b8487bc5-jsvq7         vote      postgres:15.0-alpine3.16                                                  running   0              30s ago
+vote.result-6f6dff8dd8-7gzkn     vote      sha256:805ece5530411a09e8e97e59eb9477355ef260c9d9a4204667ce2a364cddcc53   running   0              30s ago
+vote.worker-57bcd65d56-ml9cl     vote      sha256:f97cb92018967769330da09bba644da395c176f549e1d11bf48da3a8927cb62e   running   0              30s ago
+vote.redis-86c6745f86-hs667      vote      redis:7.0.5-alpine3.16                                                    running   0              31s ago
+vote.resultui-64f48dd775-dm9ht   vote      sha256:a6f9230076947f698858df6793097f6b239f3eef108297e4e4d62e9b6f258d9a   running   0              31s ago
+vote.vote-6f448d9c4b-45lsw       vote      sha256:73836e77179e1eb068d4aa54d58350c0bc2ebf32b45aab80997273278fbd2373   running   0              31s ago
+vote.voteui-86bb4b699f-bw4z4     vote      sha256:069dcc1ab8846d2eb6e8b57d39a29f07607a477f74ecde66d0ef0e02289300d6   running   0              31s ago
+vote.voteui-86bb4b699f-nm2n9     vote      sha256:069dcc1ab8846d2eb6e8b57d39a29f07607a477f74ecde66d0ef0e02289300d6   running   0              31s ago
+vote.voteui-86bb4b699f-zshbf     vote      sha256:069dcc1ab8846d2eb6e8b57d39a29f07607a477f74ecde66d0ef0e02289300d6   running   0              31s ago
+```
+
 - running the app overwriting the default args
 
 The following command will not use the default value of the *replicas* args but it will use the user supplied value instead. Make sure it creates 5 *voteui* containers:
@@ -57,13 +71,130 @@ acorn run -n vote --update . --replicas=5
 
 - running the app specifying a profile
 
-The following command will not use the default value of the *replicas* args but it will use the value defined in the *test* profile instead. Make sure it creates 2 containers for the *vote-ui* microservice:
+The following command will not use the default value of the *replicas* args but it will use the value defined in the *test* profile instead. Make sure it creates 2 containers for the *voteui* microservice:
 
 ```
 acorn run -n vote --update --profile test .
 ```
 
 We only used the *voteui* container to illustrate the usage of args / profile but we could have used other stateless containers in the same way. Also, we only specified a simple args (a string) but more complex structure could be used as well.
+
+<details>
+  <summary markdown="span">Acornfile you should have at the end of this step...</summary>
+<pre>
+args: {
+    replicas: 3
+}
+profiles: {
+    dev: {
+        replicas: 1
+    }
+    test: {
+        replicas: 2
+    }
+}
+containers: {
+  voteui: {
+    if args.dev {
+      dirs: "/usr/share/nginx/html": "./vote-ui"
+    }
+    build: {
+      context: "./vote-ui"
+    }
+    ports: publish : "80/http"
+    scale: args.replicas
+  }
+  vote: {
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./vote"
+    }
+    if args.dev {
+      dirs: {
+          "/app": "./vote"
+      }
+    }
+    ports: "5000/http"
+  }
+  redis: {
+    image: "redis:7.0.5-alpine3.16"
+    ports: "6379/tcp"
+    dirs: {
+      if !args.dev {
+        "/data": "volume://redis"
+      }
+    }
+  }
+  worker: {
+    build: "./worker/go"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+  }
+  db: {
+    image: "postgres:15.0-alpine3.16"
+    ports: "5432/tcp"
+    env: {
+      "POSTGRES_USER": "secret://db-creds/username"
+      "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+    dirs: {
+      if !args.dev {
+        "/var/lib/postgresql/data": "volume://db"
+      }
+    }
+  }
+  result: {
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./result"
+    }
+    if args.dev {
+      dirs: {
+          "/app": "./result"
+      }
+    }   
+    ports: "5000/http"
+    env: {
+      "POSTGRES_USER": "secret://db-creds/username"
+      "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+  }
+  resultui: {
+    build: {
+      target: std.ifelse(args.dev, "dev", "production")
+      context: "./result-ui"
+    }
+    if args.dev {
+      dirs: {
+        "/app": "./result-ui"
+      }
+    } 
+    ports: publish : "80/http"
+  }
+}
+secrets: {
+    "db-creds": {
+        type: "basic"
+        data: {
+            username: ""
+            password: ""
+        }
+    }
+}
+volumes: {
+  if !args.dev {
+    "db": {
+        size: "100M"
+    }
+    "redis": {
+        size: "100M"
+    }
+  }
+}
+</pre>
+</details>
 
 Note: you can find more information about Arguments and Profiles in [the official documentation](https://docs.acorn.io/authoring/args-and-profiles)
 

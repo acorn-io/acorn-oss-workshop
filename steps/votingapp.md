@@ -21,8 +21,8 @@ Let's give a quick overview of each microservice of the application:
 - vote-ui is a web UI built with VueJS, it allows a user to choose an item between Cats and Dogs
 - vote is a backend exposing an API built with Python / Flask
 - redis is the database where votes are stored
-- worker is a service that retrieves votes from redis and stores the results in a postgres database. Several declinations exist for that microservice: Java, .NET, Go, Rust
-- db is the database (based on Postgres) in which the worker consolidates the votes
+- worker is a service that retrieves votes from redis and stores the results in a postgres database
+- db is the Postgres database in which the worker consolidates the votes
 - result is the backend sending votes to the result-ui via websocket
 - result-ui is a web UI built with Angular, it displays the results of the votes
 

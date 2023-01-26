@@ -23,7 +23,7 @@ multipass launch -n k3s -c 4 -d 20G -m 4G
 
 In case you have access to a cloud provider (AWS, Google GCP, DigitalOcean, Exoscale, Scaleway, ...), you can spin up a VM on their infrastructre.
 
-Using your favorite cloud provider, run a small VM something like 2G RAM, 2vcpus. This will only cost you a cloud of dollar for the entire workshop. Do not forget to delete the VM after the workshop though !
+Using your favorite cloud provider, run a small VM something like 2G RAM, 2vcpus. This will only cost you a couple of dollars for the entire workshop. Do not forget to delete the VM after the workshop though !
 
 ### Run a shell in the VM
 
@@ -64,6 +64,8 @@ NAME   STATUS   ROLES                  AGE   VERSION
 k3s    Ready    control-plane,master   42s   v1.25.4+k3s1
 ```
 
+Note: your version of k3s could be slightly different
+
 ## Acorn
 
 Now you have a local Kubernetes, you will install Acorn inside of it.
@@ -78,9 +80,9 @@ You should get an output similar to the following one (your Acorn version might 
 
 ```
 [INFO]  Finding release for channel latest
-[INFO]  Using v0.4.0 as release
-[INFO]  Downloading hash https://github.com/acorn-io/acorn/releases/download/v0.4.0/checksums.txt
-[INFO]  Downloading archive https://github.com/acorn-io/acorn/releases/download/v0.4.0/acorn-v0.4.0-linux-arm64.tar.gz
+[INFO]  Using v0.5.0 as release
+[INFO]  Downloading hash https://github.com/acorn-io/acorn/releases/download/v0.5.0/checksums.txt
+[INFO]  Downloading archive https://github.com/acorn-io/acorn/releases/download/v0.5.0/acorn-v0.5.0-linux-amd64.tar.gz
 [INFO]  Verifying binary download
 [INFO]  Installing acorn to /usr/local/bin/acorn
 ```
@@ -96,42 +98,42 @@ Usage:
   acorn [command]
 
 Available Commands:
-  all         List (almost) all objects
-  app         List or get apps
-  build       Build an app from a Acornfile file
-  check       Check if the cluster is ready for Acorn
-  container   Manage containers
-  credential  Manage registry credentials
-  exec        Run a command in a container
-  help        Help about any command
-  image       Manage images
-  info        Info about acorn installation
-  install     Install and configure acorn in the cluster
-  login       Add registry credentials
-  logout      Remove registry credentials
-  logs        Log all pods from app
-  pull        Pull an image from a remote registry
-  push        Push an image to a remote registry
-  render      Evaluate and display an Acornfile with args
-  rm          Delete an app, container, secret or volume
-  run         Run an app from an image or Acornfile
-  secret      Manage secrets
-  start       Start an app
-  stop        Stop an app
-  tag         Tag an image
-  uninstall   Uninstall acorn and associated resources
-  update      Update a deployed app
-  volume      Manage volumes
-  wait        Wait an app to be ready then exit with status code 0
+  all          List (almost) all objects
+  app          List or get apps
+  build        Build an app from a Acornfile file
+  check        Check if the cluster is ready for Acorn
+  container    Manage containers
+  credential   Manage registry credentials
+  exec         Run a command in a container
+  help         Help about any command
+  image        Manage images
+  info         Info about acorn installation
+  install      Install and configure acorn in the cluster
+  login        Add registry credentials
+  logout       Remove registry credentials
+  logs         Log all workloads from an app
+  project      Manage projects
+  pull         Pull an image from a remote registry
+  push         Push an image to a remote registry
+  render       Evaluate and display an Acornfile with args
+  rm           Delete an app, container, secret or volume
+  run          Run an app from an image or Acornfile
+  secret       Manage secrets
+  start        Start an app
+  stop         Stop an app
+  tag          Tag an image
+  uninstall    Uninstall acorn and associated resources
+  update       Update a deployed app
+  volume       Manage volumes
+  wait         Wait an app to be ready then exit with status code 0
 
 Flags:
-  -A, --all-namespaces      Namespace to work in
-      --context string      Context to use in the kubeconfig file
+  -A, --all-projects        Use all known projects
       --debug               Enable debug logging
       --debug-level int     Debug log level (valid 0-9) (default 7)
   -h, --help                help for acorn
-      --kubeconfig string   Location of a kubeconfig file
-      --namespace string    Namespace to work in (default "acorn")
+      --kubeconfig string   Explicitly use kubeconfig file, overriding current project
+  -j, --project string      Project to work in
   -v, --version             version for acorn
 
 Use "acorn [command] --help" for more information about a command.
@@ -148,14 +150,15 @@ This should return a content similar to the following one:
 ```
   ✔  Running Pre-install Checks
   ✔  Installing ClusterRoles
-  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.4.0)
+  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.5.0)
   ✔  Waiting for controller deployment to be available
   ✔  Waiting for API server deployment to be available
+  ✔  Waiting for registry server deployment to be available
   ✔  Running Post-install Checks
   ✔  Installation done
 ```
 
-Acorn is installed and ready to manage containerized applications. I
+Acorn is installed and ready to manage containerized applications.
 
 [Previous](./acorn.md)  
 [Next](./votingapp.md)
