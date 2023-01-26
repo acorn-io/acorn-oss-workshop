@@ -50,15 +50,13 @@ acorn rm vote --all --force
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
-```
+<pre>
 labels: {
     application: "votingapp"
 }
-
 args: {
     replicas: 3
 }
-
 profiles: {
     dev: {
         replicas: 1
@@ -67,9 +65,7 @@ profiles: {
         replicas: 2
     }
 }
-
 containers: {
-
   voteui: {
     labels: {
       component: "voteui"
@@ -84,7 +80,6 @@ containers: {
     scale: args.replicas
     memory: 32Mi
   }
-
   vote: {
     labels: {
       component: "vote"
@@ -101,7 +96,6 @@ containers: {
     ports: "5000/http"
     memory: 128Mi
   }
-  
   redis: {
     labels: {
       component: "redis"
@@ -115,7 +109,6 @@ containers: {
     }
     memory: 32Mi
   }
-
   worker: {
     labels: {
       component: "worker"
@@ -127,7 +120,6 @@ containers: {
     }
     memory: 32Mi
   }
-
   db: {
     labels: {
       component: "db"
@@ -145,7 +137,6 @@ containers: {
     }
     memory: 128Mi
   }
-
   result: {
     labels: {
       component: "result"
@@ -166,7 +157,6 @@ containers: {
     }
     memory: 128Mi
   }
-
   resultui: {
     labels: {
       component: "resultui"
@@ -184,7 +174,6 @@ containers: {
     memory: 32Mi
   }
 }
-
 secrets: {
     "db-creds": {
         type: "basic"
@@ -194,7 +183,6 @@ secrets: {
         }
     }
 }
-
 volumes: {
   if !args.dev {
     "db": {
@@ -205,7 +193,7 @@ volumes: {
     }
   }
 }
-```
+</pre>
 </details>
 
 Note: you can find more information about memory constraints in [the official documentation](https://docs.acorn.io/reference/memory)

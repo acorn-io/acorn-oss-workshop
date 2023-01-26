@@ -372,24 +372,20 @@ As we’ve done previously we could verify the app is working fine and then vote
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
-```
+<pre>
 containers: {
-  
   voteui: {
     build: "./vote-ui"
     ports: publish : "80/http"
   }
-
   vote: {
     build: "./vote"
     ports: "5000/http"
   }
-
   redis: {
     image: "redis:7.0.5-alpine3.16"
     ports: "6379/tcp"
   }
-
   worker: {
     build: "./worker/go"
     env: {
@@ -397,7 +393,6 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
   }
-
   db: {
     image: "postgres:15.0-alpine3.16"
     ports: "5432/tcp"
@@ -406,7 +401,6 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
   }
-
   result: {
     build: "./result"
     ports: "5000/http"
@@ -415,13 +409,11 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
    }
   }
-
   resultui: {
     build: "./result-ui"
     ports: publish : "80/http"
   }
 }
-
 secrets: {
     "db-creds": {
         type: "basic"
@@ -431,7 +423,7 @@ secrets: {
         }
     }
 }
-```
+</pre>
 </details>
 
 Note: you can find more information about secrets in [the official documentation](https://docs.acorn.io/authoring/secrets)

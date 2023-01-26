@@ -81,7 +81,7 @@ We only used the *voteui* container to illustrate the usage of args / profile bu
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
-```
+<pre>
 args: {
     replicas: 3
 }
@@ -93,9 +93,7 @@ profiles: {
         replicas: 2
     }
 }
-
 containers: {
-
   voteui: {
     if args.dev {
       dirs: "/usr/share/nginx/html": "./vote-ui"
@@ -106,7 +104,6 @@ containers: {
     ports: publish : "80/http"
     scale: args.replicas
   }
-
   vote: {
     build: {
       target: std.ifelse(args.dev, "dev", "production")
@@ -119,7 +116,6 @@ containers: {
     }
     ports: "5000/http"
   }
-  
   redis: {
     image: "redis:7.0.5-alpine3.16"
     ports: "6379/tcp"
@@ -129,7 +125,6 @@ containers: {
       }
     }
   }
-
   worker: {
     build: "./worker/go"
     env: {
@@ -137,7 +132,6 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
   }
-
   db: {
     image: "postgres:15.0-alpine3.16"
     ports: "5432/tcp"
@@ -151,7 +145,6 @@ containers: {
       }
     }
   }
-
   result: {
     build: {
       target: std.ifelse(args.dev, "dev", "production")
@@ -168,7 +161,6 @@ containers: {
       "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
   }
-
   resultui: {
     build: {
       target: std.ifelse(args.dev, "dev", "production")
@@ -182,7 +174,6 @@ containers: {
     ports: publish : "80/http"
   }
 }
-
 secrets: {
     "db-creds": {
         type: "basic"
@@ -192,7 +183,6 @@ secrets: {
         }
     }
 }
-
 volumes: {
   if !args.dev {
     "db": {
@@ -203,7 +193,7 @@ volumes: {
     }
   }
 }
-```
+</pre>
 </details>
 
 Note: you can find more information about Arguments and Profiles in [the official documentation](https://docs.acorn.io/authoring/args-and-profiles)

@@ -65,15 +65,13 @@ kubectl get po --show-labels -n vote-79e1c2f0-c77
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
-```
+<pre>
 labels: {
     application: "votingapp"
 }
-
 args: {
     replicas: 3
 }
-
 profiles: {
     dev: {
         replicas: 1
@@ -82,9 +80,7 @@ profiles: {
         replicas: 2
     }
 }
-
 containers: {
-
   voteui: {
     labels: {
       component: "voteui"
@@ -98,7 +94,6 @@ containers: {
     ports: publish : "80/http"
     scale: args.replicas
   }
-
   vote: {
     labels: {
       component: "vote"
@@ -114,7 +109,6 @@ containers: {
     }
     ports: "5000/http"
   }
-  
   redis: {
     labels: {
       component: "redis"
@@ -127,7 +121,6 @@ containers: {
       }
     }
   }
-
   worker: {
     labels: {
       component: "worker"
@@ -138,7 +131,6 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
   }
-
   db: {
     labels: {
       component: "db"
@@ -155,7 +147,6 @@ containers: {
       }
     }
   }
-
   result: {
     labels: {
       component: "result"
@@ -175,7 +166,6 @@ containers: {
       "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
   }
-
   resultui: {
     labels: {
       component: "resultui"
@@ -192,7 +182,6 @@ containers: {
     ports: publish : "80/http"
   }
 }
-
 secrets: {
     "db-creds": {
         type: "basic"
@@ -202,7 +191,6 @@ secrets: {
         }
     }
 }
-
 volumes: {
   if !args.dev {
     "db": {
@@ -213,7 +201,7 @@ volumes: {
     }
   }
 }
-```
+</pre>
 </details>
 
 Note: you can find more information about labels in [the official documentation](https://docs.acorn.io/authoring/labels)

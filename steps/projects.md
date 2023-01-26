@@ -26,7 +26,16 @@ voting
 Set *voting* as the default project:
 
 ```
-$ acorn project use voting
+acorn project use voting
+```
+
+This *voting* project should now appear as the default one:
+
+```
+$ acorn project
+NAME      DEFAULT   DESCRIPTION
+acorn     
+voting    *
 ```
 
 Run the application inside of this project

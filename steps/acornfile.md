@@ -329,55 +329,49 @@ acorn all
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
-```
+<pre>
 containers: {
- voteui: {
-   build: "./vote-ui"
-   ports: publish : "80/http"
- }
- 
- vote: {
-   build: "./vote"
-   ports: "5000/tcp"
- }
- 
- redis: {
-   image: "redis:6.2-alpine3.13"
-   ports: "6379/tcp"
- }
- 
- worker: {
-   build: "./worker/go"
-   env: {
-     "POSTGRES_USER": "postgres"
-     "POSTGRES_PASSWORD": "postgres"
-   }
- }
- 
- db: {
-   image: "postgres:13.2-alpine"
-   ports: "5432/tcp"
-   env: {
-     "POSTGRES_USER": "postgres"
-     "POSTGRES_PASSWORD": "postgres"
-   }
- }
- 
-result: {
-   build: "./result"
-   ports: "5000/http"
-   env: {
-     "POSTGRES_USER": "postgres"
-     "POSTGRES_PASSWORD": "postgres"
-   }
- }
- 
- resultui: {
-   build: "./result-ui"
-   ports: publish : "80/http"
- }
+  voteui: {
+    build: "./vote-ui"
+    ports: publish : "80/http"
+  }
+  vote: {
+    build: "./vote"
+    ports: "5000/tcp"
+  }
+  redis: {
+    image: "redis:6.2-alpine3.13"
+    ports: "6379/tcp"
+  }
+  worker: {
+    build: "./worker/go"
+    env: {
+      "POSTGRES_USER": "postgres"
+      "POSTGRES_PASSWORD": "postgres"
+    }
+  }
+  db: {
+    image: "postgres:13.2-alpine"
+    ports: "5432/tcp"
+    env: {
+      "POSTGRES_USER": "postgres"
+      "POSTGRES_PASSWORD": "postgres"
+    }
+  }
+  result: {
+    build: "./result"
+    ports: "5000/http"
+    env: {
+      "POSTGRES_USER": "postgres"
+      "POSTGRES_PASSWORD": "postgres"
+    }
+  }
+  resultui: {
+    build: "./result-ui"
+    ports: publish : "80/http"
+  }
 }
-```
+</pre>
 </details>
 
 Note: you can find more information about Acornfile in [Authoring Acornfile](https://docs.acorn.io/authoring)
