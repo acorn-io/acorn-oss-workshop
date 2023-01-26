@@ -5,7 +5,7 @@ First run the application with a SemVer pattern as follows:
 Note: replace the placeholder *YOUR_DOCKERHUB_USERNAME* with your actual DockerHub's username
 
 ```
-acorn run -n vote docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v#.#.#
+acorn run -n vote docker.io/YOUR_DOCKERHUB_USERNAME/acorn-workshop:v#.#.#
 ```
 
 As usual, you should receive http endpoints to access both *voteui* and *resultui* container.
@@ -41,13 +41,13 @@ html,body{
 Next build the new version of the application specifying *v1.0.1* in the image's tag:
 
 ```
-acorn build -t docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.1 .
+acorn build -t docker.io/YOUR_DOCKERHUB_USERNAME/acorn-workshop:v1.0.1 .
 ```
 
 Then push this new version to the DockerHub:
 
 ```
-acorn push docker.io/YOUR_DOCKERHUB_USERNAME/vote-workshop:v1.0.1
+acorn push docker.io/YOUR_DOCKERHUB_USERNAME/acorn-workshop:v1.0.1
 ```
 
 After a few tens of seconds the running application should be upgraded from *v1.0.0* to *v1.0.1*

@@ -51,7 +51,9 @@ containers: {
 }
 ```
 
-If you look at how the username and password are provided to the *db* container, and to the other containers that need to connect to it, you’ll notice this is not clean nor secure because those credentials are in plain text in each container. In this step we will improve the Acornfile using Acorn secrets.
+If you look at how the username and password are provided to the *db* container, and to the other containers that need to connect to it, you’ll notice this is not clean nor secure because those credentials are in plain text in each container.  
+
+In this step we will improve the Acornfile using Acorn secrets.
 
 ## About Acorn secrets
 
@@ -89,17 +91,42 @@ Next, reference the secret’s username and password into the *worker*, *db* and
 secrets://SECRET_NAME/PROPERTY_NAME
 ```
 
-For instance, the new definition of the *db* container is as follows (the same changes need be done for the *worker* and *result* containers):
+For instance, the new definition of the *db* container is as follows:
 
 ```
-  db: {
-    image: "postgres:15.0-alpine3.16"
-    ports: "5432/tcp"
-    env: {
-     "POSTGRES_USER": "secret://db-creds/username"
-     "POSTGRES_PASSWORD": "secret://db-creds/password"
-    }
+db: {
+  image: "postgres:15.0-alpine3.16"
+  ports: "5432/tcp"
+  env: {
+    "POSTGRES_USER": "secret://db-creds/username"
+    "POSTGRES_PASSWORD": "secret://db-creds/password"
   }
+}
+```
+
+The same changes need be done for the *worker* and *result* containers:
+
+```
+worker: {
+  build: "./worker/go"
+  env: {
+    "POSTGRES_USER": "secret://db-creds/username"
+    "POSTGRES_PASSWORD": "secret://db-creds/password"
+  }
+}
+```
+
+and to the *result* container:
+
+```
+result: {
+  build: "./result"
+  ports: "5000/http"
+  env: {
+    "POSTGRES_USER": "secret://db-creds/username"
+    "POSTGRES_PASSWORD": "secret://db-creds/password"
+  }
+}
 ```
 
 The Acornfile is slightly better now because the secret is defined once and then referenced in the containers which need it. But, the credentials are still in plain text in the definition of the secret, which is what we’d like to avoid.
@@ -187,7 +214,7 @@ Run the app using this new version of the Acornfile:
 acorn run -n vote .
 ```
 
-Note: if the app is already running you can use the following command to update it:
+Note: if the app was already running you can use the following command to update it:
 
 ```
 acorn run -n vote --update .
@@ -195,9 +222,9 @@ acorn run -n vote --update .
 
 After a couple of minutes you will get http endpoints (different from the ones you got in the previous step) to access both *voteui* and *resultui* containers:
 
-- voteui : http://voteui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+- voteui : http://voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io
 
-- resultui: http://resultui-vote-df018e5a.tcc3t3.alpha.on-acorn.io
+- resultui: http://resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
@@ -208,22 +235,16 @@ You can now access the Vote UI, select your favorite pet, then make sure your vo
 
 ```
 $ kubectl get ns
-NAME                STATUS   AGE
-default             Active   53m
-kube-system         Active   53m
-kube-public         Active   53m
-kube-node-lease     Active   53m
-acorn               Active   52m
-acorn-system        Active   52m
-vote-b74ab112-b0d   Active   3m12s <- new namespace
+...
+vote-7830ef54-bef    Active   61s   <-- new namespace created
 ```
 
 Within this same namespace you could see the Kubernetes Deployment and Service as in the previous step, and you would also get the *db-creds* secret that is now part of the application: 
 
 ```
-$ kubectl get secret -n vote-b74ab112-b0d db-creds
-NAME                         TYPE                             DATA   AGE
-db-creds                     secrets.acorn.io/basic           2      3m56s
+$ kubectl get secret -n vote-7830ef54-bef db-creds
+NAME       TYPE                     DATA   AGE
+db-creds   secrets.acorn.io/basic   2      58s
 ```
 </details>
 
@@ -246,7 +267,7 @@ acorn secrets create --type basic --data username=postgres --data password=postg
 Once created we can easily retrieve the value of the secret (in plain text !):
 
 ```
-$ acorn secret expose postgres_credentials
+$ acorn secret reveal postgres_credentials
 NAME                   TYPE      KEY        VALUE
 postgres-credentials   basic     password   postgres
 postgres-credentials   basic     username   postgres
@@ -261,7 +282,7 @@ acorn secret encrypt postgres-credentials
 You will get the encrypted version similar to the following one (note the ACORNENC string at the beginning):
 
 ```
-ACORNENC:eyJfb3VnbHVfOG00ZmRtR0hSQlh3QUJ6NU9ZcVpzOEdLS3ZiRXFCcmdjenc4IjoicFpNWC1BMXJ3bVFXT29iUFdRdXVWRmRsQVZ3N0tzSFRFMjdHRERKNUlIX3ZaaU9fU1hIQWRyMUtVY09CQ2kzTU9XWXJpN1JuOVR4a1FCWDZFaEVrSnBIUHdxWSJ9
+ACORNENC:eyJ6a0RmcUEzQlF4aUxybGpyWnJtd2l2dzhDeTdIOTlIS216b3NXcXR3WXg0IjoiLVlzYU9yOUJvbVQ2QVk3RFVsLVFMRE9pYmp5MTlsMW9UUFJGSDViVWQwd1kzSmxTbzhYcER2Z2pJZzZmQ1pHSWxlbUtiN1ZPeUxfaHBWYkI2NFRZMndFcHAyVSJ9
 ```
 
 Behind the hood, the encryption is done using the cluster’s public key which can be obtained with the following command:
@@ -275,47 +296,68 @@ This returns a result similar to that one, the encryption key being defined unde
 ```
 ---
 client:
+  cli:
+    hubServers:
+    - acorn.io
   version:
-    commit: f717d41a2cce4e37258bd1a3cb39dfd5841d4253
-    tag: v0.4.0
-namespace:
+    commit: 7a4904c7d2d1077885ad6e2775550666b0a96905
+    tag: v0.5.0
+project:
   publicKeys:
-  - keyID: sgVNRZGN3QNnwHXslyNxyxZlytsP3yOk7SNDgWWnxjg
+  - keyID: zkDfqA3BQxiLrljrZrmwivw8Cy7H99HKmzosWqtwYx4
 server:
-  apiServerImage: ghcr.io/acorn-io/acorn:v0.4.0
+  apiServerImage: ghcr.io/acorn-io/acorn:v0.5.0
   config:
     acornDNS: auto
     acornDNSEndpoint: https://alpha-dns.acrn.io/v1
     autoUpgradeInterval: 5m
+    builderPerProject: false
     clusterDomains:
-    - .klkue5.alpha.on-acorn.io
+    - .jy7jy0.alpha.on-acorn.io
     defaultPublishMode: defined
+    httpEndpointPattern: '{{hashConcat 8 .Container .App .Namespace | truncate}}.{{.ClusterDomain}}'
+    ignoreUserLabelsAndAnnotations: false
     ingressClassName: null
     internalClusterDomain: svc.cluster.local
+    internalRegistryPrefix: ""
     letsEncrypt: disabled
     letsEncryptEmail: ""
     letsEncryptTOSAgree: false
     podSecurityEnforceProfile: baseline
+    publishBuilders: false
+    recordBuilds: false
     setPodSecurityEnforceProfile: true
-  controllerImage: ghcr.io/acorn-io/acorn:v0.4.0
+    useCustomCABundle: false
+    workloadMemoryDefault: 0
+    workloadMemoryMaximum: 0
+  controllerImage: ghcr.io/acorn-io/acorn:v0.5.0
   dirty: false
-  gitCommit: f717d41a2cce4e37258bd1a3cb39dfd5841d4253
+  gitCommit: 7a4904c7d2d1077885ad6e2775550666b0a96905
   letsEncryptCertificate: disabled
-  tag: v0.4.0
+  tag: v0.5.0
   userConfig:
     acornDNS: null
     acornDNSEndpoint: null
     autoUpgradeInterval: null
+    builderPerProject: null
     clusterDomains: null
     defaultPublishMode: ""
+    httpEndpointPattern: null
+    ignoreUserLabelsAndAnnotations: null
     ingressClassName: null
     internalClusterDomain: ""
+    internalRegistryPrefix: null
     letsEncrypt: null
     letsEncryptEmail: ""
     letsEncryptTOSAgree: null
     podSecurityEnforceProfile: ""
+    publishBuilders: null
+    recordBuilds: null
     setPodSecurityEnforceProfile: null
-  version: v0.4.0+f717d41a
+    useCustomCABundle: false
+    workloadMemoryDefault: null
+    workloadMemoryMaximum: null
+  version: v0.5.0+7a4904c7
 ```
 
 We can then provide the db credential through this encrypted secret to the *db*, *worker* and *result* containers. For that purpose we use the *-s* flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.
@@ -328,9 +370,73 @@ acorn run -n vote -s postgres-credentials:db-creds --update .
 
 As we’ve done previously we could verify the app is working fine and then vote for our favorite pet.
 
+<details>
+  <summary markdown="span">Acornfile you should have at the end of this step...</summary>
+```
+containers: {
+  
+  voteui: {
+    build: "./vote-ui"
+    ports: publish : "80/http"
+  }
+
+  vote: {
+    build: "./vote"
+    ports: "5000/http"
+  }
+
+  redis: {
+    image: "redis:7.0.5-alpine3.16"
+    ports: "6379/tcp"
+  }
+
+  worker: {
+    build: "./worker/go"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+  }
+
+  db: {
+    image: "postgres:15.0-alpine3.16"
+    ports: "5432/tcp"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+  }
+
+  result: {
+    build: "./result"
+    ports: "5000/http"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
+   }
+  }
+
+  resultui: {
+    build: "./result-ui"
+    ports: publish : "80/http"
+  }
+}
+
+secrets: {
+    "db-creds": {
+        type: "basic"
+        data: {
+            username: ""
+            password: ""
+        }
+    }
+}
+```
+</details>
+
 Note: you can find more information about secrets in [the official documentation](https://docs.acorn.io/authoring/secrets)
 
-In this step we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secrets created from the command line instead. We focused on the connection to the *db* container but we could use the same approach to secure the connection to *redis*. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls in a configuration file.
+Note: In this step we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secret created from the command line. We focused on the connection to the *db* container but we could use the same approach to secure the connection to *redis*. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls in a configuration file.
 
 [Previous](./acornfile.md)  
 [Next](./volumes.md)

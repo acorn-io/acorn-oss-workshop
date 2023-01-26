@@ -1,3 +1,7 @@
+labels: {
+    application: "votingapp"
+}
+
 args: {
     replicas: 3
 }
@@ -11,26 +15,21 @@ profiles: {
     }
 }
 
-labels: {
-    application: "votingapp"
-}
-
 containers: {
-  
+
   voteui: {
     labels: {
       component: "voteui"
     }
     if args.dev {
-      dirs: {
-        "/usr/share/nginx/html": "./vote-ui"
-      }
+      dirs: "/usr/share/nginx/html": "./vote-ui"
     }
     build: {
       context: "./vote-ui"
     }
     ports: publish : "80/http"
     scale: args.replicas
+    memory: 32Mi
   }
 
   vote: {
@@ -47,8 +46,9 @@ containers: {
       }
     }
     ports: "5000/http"
+    memory: 128Mi
   }
-
+  
   redis: {
     labels: {
       component: "redis"
@@ -60,6 +60,7 @@ containers: {
         "/data": "volume://redis"
       }
     }
+    memory: 32Mi
   }
 
   worker: {
@@ -71,6 +72,7 @@ containers: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 32Mi
   }
 
   db: {
@@ -80,14 +82,15 @@ containers: {
     image: "postgres:15.0-alpine3.16"
     ports: "5432/tcp"
     env: {
-     "POSTGRES_USER": "secret://db-creds/username"
-     "POSTGRES_PASSWORD": "secret://db-creds/password"
+      "POSTGRES_USER": "secret://db-creds/username"
+      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
     dirs: {
       if !args.dev {
         "/var/lib/postgresql/data": "volume://db"
       }
     }
+    memory: 128Mi
   }
 
   result: {
@@ -100,14 +103,15 @@ containers: {
     }
     if args.dev {
       dirs: {
-        "/app": "./result"
+          "/app": "./result"
       }
-    }  
+    }   
     ports: "5000/http"
     env: {
-     "POSTGRES_USER": "secret://db-creds/username"
-     "POSTGRES_PASSWORD": "secret://db-creds/password"
-   }
+      "POSTGRES_USER": "secret://db-creds/username"
+      "POSTGRES_PASSWORD": "secret://db-creds/password"
+    }
+    memory: 128Mi
   }
 
   resultui: {
@@ -124,6 +128,7 @@ containers: {
       }
     } 
     ports: publish : "80/http"
+    memory: 32Mi
   }
 }
 

@@ -17,6 +17,8 @@ We will follow the steps below:
 - [Development mode](./steps/development_mode.md)  
 - [Introduction to args and profile](./steps/profiles.md) 
 - [Adding labels](./steps/labels.md)  
+- [Memory contraints](./steps/constraints.md)
+- [Run your app in a project](./steps/projects.md)
 - [Build an distribute the application as an Acorn image](./steps/acorn_image.md)
 - [Upgrade the application](./steps/upgrade.md)  
 

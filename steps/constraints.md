@@ -1,66 +1,51 @@
-It is often usefull to add labels on application's resources. Labels allow to group resources in a logical way and also to filter them. As you will see below, Acorn makes it very easy to add labels on the whole application or on indivual pieces.
+Defining memory contraints for each container is a the best practice as it allows to have more control on over application. This could prevent resources exhaustion in the case a container start acting strangely allocating too much memory.
 
-First modify the Acornfile adding the *labels* top-level key at the top of the file:
-
-```
-labels: {
-    application: "votingapp"
-}
-```
-
-Next modify the definition of each container adding a new label property with *component* as the key and the container's name as the associated value. The following shows the changes done on the *voteui* container:
+Acorn offers a way to specify memory constraints using the *memory* property in the definition of a container. For instance, we can specify the worker container cannot use more than 32Mi of memory:
 
 ```
-  voteui: {
+  worker: {
     labels: {
-      component: "voteui"
+      component: "worker"
     }
-    if args.dev {
-      dirs: "/usr/share/nginx/html": "./vote-ui"
+    build: "./worker/go"
+    env: {
+     "POSTGRES_USER": "secret://db-creds/username"
+     "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
-    build: {
-      context: "./vote-ui"
-    }
-    ports: publish : "80/http"
-    scale: args.replicas
+    memory: 32Mi
   }
 ```
 
-Once you've added the new label for each container, update the application and check the labels now existing on the application's resources.
+Note: the amount of memory used here is arbitrary, in a real world scenario we would first observe how the application behaves with time (for instance using a monitoring stack based on Prometheus) and set the memory contraint accordingly.
+
+Memory constraints can also be provided when running an acorn:
 
 ```
-acorn run -n vote --update  .
+acorn run -n vote -m worker=32Mi .
 ```
 
-<details>
-  <summary markdown="span">If you curious about...</summary>
+Setup the same memory contraints of *32Mi* to all the containers of the VotingApp (*voteui*, *vote*, *worker*, *result*, *resultui*, *redis* and *pg*)
 
-...what happened under the hood, you can see that the Pods created now have 2 additional labels:
-
-- application
-- component
-
-Those labels were added on top of the labels automatically set when running the acorn application:
-
-- acorn.io/app-name
-- acorn.io/app-namespace
-- acorn.io/container-name
-- acorn.io/managed
-- port-number.acorn.io/xxx
-- service-name.acorn.io/yyy
-
-To verify this, first get the Kubernetes namespace created for that Acorn app (your namespace will be different):
+Then, run the application:
 
 ```
-$ kubectl get ns
-...
-vote-79e1c2f0-c77    Active   6m
+acorn run -n vote --update .
 ```
 
-Next check the labels of the Pods in that namespace:
+Listing the containers you should see a couple of them (*result* and *vote* and probably *db* are not running correctly)
 
 ```
-kubectl get po --show-labels -n vote-79e1c2f0-c77
+acorn containers
+```
+
+Under the hood we could see those containers get an *OOMKilled* error because they reach the memory limit.
+
+Change the value of the *memory* property to *128Mi* for *result*, *vote* and *db* containers and update the application one more time You should now see all containers are running fine.
+
+You can then remove the application and all the related resources:
+
+```
+acorn rm vote --all --force
 ```
 
 <details>
@@ -97,6 +82,7 @@ containers: {
     }
     ports: publish : "80/http"
     scale: args.replicas
+    memory: 32Mi
   }
 
   vote: {
@@ -113,6 +99,7 @@ containers: {
       }
     }
     ports: "5000/http"
+    memory: 128Mi
   }
   
   redis: {
@@ -126,6 +113,7 @@ containers: {
         "/data": "volume://redis"
       }
     }
+    memory: 32Mi
   }
 
   worker: {
@@ -137,6 +125,7 @@ containers: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 32Mi
   }
 
   db: {
@@ -154,6 +143,7 @@ containers: {
         "/var/lib/postgresql/data": "volume://db"
       }
     }
+    memory: 128Mi
   }
 
   result: {
@@ -174,6 +164,7 @@ containers: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 128Mi
   }
 
   resultui: {
@@ -190,6 +181,7 @@ containers: {
       }
     } 
     ports: publish : "80/http"
+    memory: 32Mi
   }
 }
 
@@ -216,7 +208,7 @@ volumes: {
 ```
 </details>
 
-Note: you can find more information about labels in [the official documentation](https://docs.acorn.io/authoring/labels)
+Note: you can find more information about memory constraints in [the official documentation](https://docs.acorn.io/reference/memory)
 
-[Previous](./profiles.md)  
-[Next](./constraints.md)
+[Previous](./labels.md)  
+[Next](./projects.md)
