@@ -24,9 +24,7 @@ Memory constraints can also be provided when running an acorn:
 acorn run -n vote -m worker=32Mi .
 ```
 
-Setup the same memory contraints of *32Mi* to all the containers of the VotingApp (*voteui*, *vote*, *worker*, *result*, *resultui*, *redis* and *pg*)
-
-Then, run the application:
+Setup the same memory contraints of *32Mi* to all the containers of the VotingApp (*voteui*, *vote*, *worker*, *result*, *resultui*, *redis* and *pg*) and run the application:
 
 ```
 acorn run -n vote --update .

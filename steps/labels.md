@@ -62,6 +62,7 @@ Next check the labels of the Pods in that namespace:
 ```
 kubectl get po --show-labels -n vote-79e1c2f0-c77
 ```
+</details>
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
