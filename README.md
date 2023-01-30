@@ -21,6 +21,8 @@ We will follow the steps below:
 - [Run your app in a project](./steps/projects.md)
 - [Build an distribute the application as an Acorn image](./steps/acorn_image.md)
 - [Upgrade the application](./steps/upgrade.md)  
+- [Using a custom domain](./steps/domain.md)
+- [Adding TLS](./steps/tld.md)
 
 [Let's get started](./steps/acorn.md)
 
