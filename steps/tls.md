@@ -62,8 +62,8 @@ We will be returned additional https endpoints to access both *voteui* and *resu
 
 We can then access both frontend using the custom domains and via https:
 
-![Vote UI](./images/domain/vote.png)
-![Result UI](./images/domain/result.png)
+![Vote UI](./images/tls/vote.png)
+![Result UI](./images/tls/result.png)
 
 
 [Previous](./domain.md)  
