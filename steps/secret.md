@@ -375,5 +375,5 @@ Note: you can find more information about secrets in [the official documentation
 
 Note: In this step we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secret created from the command line. We focused on the connection to the *db* container but we could use the same approach to secure the connection to *redis*. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls in a configuration file.
 
-[Previous](./acornfile.md)  
+[Previous](./ops.md)  
 [Next](./volumes.md)
