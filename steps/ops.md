@@ -1,4 +1,4 @@
-In the previous step you create a first version of the Acornfile for the VotingApp and run the whole application. In the current step you will use several commands to interact with the app and help with troubleshooting.
+In the previous step you create a first version of the Acornfile for the VotingApp and run the whole application. In the current step you will use several commands to interact with the app, commands which can also help to troubleshoot the app.
 
 ## Running the application
 
@@ -10,7 +10,7 @@ acorn run -n vote .
 
 If should only take a few tens of seconds for the application to be up and running.
 
-## Inspection and troubleshooting
+## Inspecting the app
 
 Once the application is running we can have app related information, like the endpoints exposing the app, with the following command:
 
@@ -34,6 +34,8 @@ vote.vote-76b6dd8b79-fjscp     vote      sha256:86cda2b9d85b277c22ad4b93fa05cf05
 vote.worker-6c56f7f587-nwg7r   vote      sha256:6d08570ee5072485d7de6ed6b9ceea4dc9177a627819f214bd5b58808c4f2799   running   0              2m1s ago
 ```
 
+## Getting the logs
+
 Acorn allows us to get the logs of the whole application:
 
 ```
@@ -51,21 +53,15 @@ acorn logs vote.voteui-8689cb8f88-4n2h7
 
 ![Container logs](./images/ops/container-logs.png)
 
+## Running command in a container
+
 From the command line we can launch a command in a running container. The command below runs a *sh* shell in the *voteui* container and list the processes runnning inside that one:
 
 ```
-# acorn exec vote.voteui-8689cb8f88-4n2h7
-/ # ps aux
-PID   USER     TIME  COMMAND
-    1 root      0:00 nginx: master process nginx -g daemon off;
-   31 nginx     0:00 nginx: worker process
-   32 nginx     0:00 nginx: worker process
-   33 nginx     0:00 nginx: worker process
-   34 nginx     0:00 nginx: worker process
-   48 root      0:00 /bin/sh
-   54 root      0:00 ps aux
-/ #
+acorn exec vote.voteui-8689cb8f88-4n2h7
 ```
+
+![Container exec](./images/ops/container-exec.png)
 
 In this step we focused on the application itself and saw how to get information and interact with it. In the next step we will enhance the Acornfile using Acorn secrets.
 
