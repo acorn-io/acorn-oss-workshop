@@ -1,49 +1,42 @@
-Defining memory contraints for each container is a the best practice as it allows to have more control on over application. This could prevent resources exhaustion in the case a container start acting strangely allocating too much memory.
+Acorn also allows to define *jobs*. A *job* is used to run a batch job (opposed to a long-running process). A *job* can be run diredtly or scehduled in the same way of a standard Linux *cronjob*. In this step you will add a job used to add dummy votes once the application is ready.
 
-Acorn offers a way to specify memory constraints using the *memory* property in the definition of a container. For instance, we can specify the worker container cannot use more than 32Mi of memory:
+Add the following content at the end of your *Acornfile*:
 
 ```
-  worker: {
-    labels: {
-      component: "worker"
+jobs: {
+    "seed": {
+        image: "registry.gitlab.com/voting-application/tools:seed"
     }
-    build: "./worker/go"
-    env: {
-     "POSTGRES_USER": "secret://db-creds/username"
-     "POSTGRES_PASSWORD": "secret://db-creds/password"
+}
+```
+
+The above content defines a simple job based on the container image *registry.gitlab.com/voting-application/tools:seed*. The code packaged in this image injects 50 random votes inside the redis database.
+
+Run the application using this new version of the *Acornfile*:
+
+```
+acorn run -n vote .
+```
+
+Using the endpoints of the *resultui* container, you should see additional votes have been added:
+
+![Seed](./images/job/seed.png)
+
+We could also run the same job according to a schedule: the following defines a job similar to the previous one but it will run every minute (adding 50 new votes each time):
+
+```
+jobs: {
+    "seed": {
+      image: "registry.gitlab.com/voting-application/tools:seed"
+      schedule: "* * * * *"
     }
-    memory: 32Mi
-  }
+}
 ```
 
-Note: the amount of memory used here is arbitrary, in a real world scenario we would first observe how the application behaves with time (for instance using a monitoring stack based on Prometheus) and set the memory contraint accordingly.
-
-Memory constraints can also be provided when running an acorn:
+You can then remove the application and all its dependencies:
 
 ```
-acorn run -n vote -m worker=32Mi .
-```
-
-Setup the same memory contraints of *32Mi* to all the containers of the VotingApp (*voteui*, *vote*, *worker*, *result*, *resultui*, *redis* and *pg*) and run the application:
-
-```
-acorn run -n vote --update .
-```
-
-Listing the containers you should see a couple of them (*result* and *vote* and probably *db* are not running correctly)
-
-```
-acorn containers
-```
-
-Under the hood we could see those containers get an *OOMKilled* error because they reach the memory limit.
-
-Change the value of the *memory* property to *128Mi* for *result*, *vote* and *db* containers and update the application one more time You should now see all containers are running fine.
-
-You can then remove the application and all the related resources:
-
-```
-acorn rm vote --all --force
+acorn rm vote --force --all
 ```
 
 <details>
@@ -191,10 +184,15 @@ volumes: {
     }
   }
 }
+jobs: {
+    "seed": {
+        image: "registry.gitlab.com/voting-application/tools:seed"
+    }
+}
 </pre>
 </details>
 
-Note: you can find more information about memory constraints in [the official documentation](https://docs.acorn.io/reference/memory)
+Note: you can find more information about jobs in [the documentation](https://docs.acorn.io/authoring/jobs)
 
-[Previous](./labels.md)  
-[Next](./job.md)
+[Previous](./constraints.md)  
+[Next](./projects.md)
