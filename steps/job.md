@@ -22,7 +22,27 @@ Using the endpoints of the *resultui* container, you should see additional votes
 
 ![Seed](./images/job/seed.png)
 
-We could also run the same job according to a schedule: the following defines a job similar to the previous one but it will run every minute (adding 50 new votes each time):
+In order to run the job only in development mode, modify the Acornfile as follows:
+
+```
+if args.dev {
+  jobs: {
+    "seed": {
+      image: "registry.gitlab.com/voting-application/tools:seed"
+    }
+  }
+}
+```
+
+Run the application in "normal" mode then in "dev" mode to make sure the job is only run is this last configuration.
+
+You can then remove the application and all its dependencies:
+
+```
+acorn rm vote --force --all
+```
+
+We could also have run the same job according to a schedule. for instance the following defines a job similar to the previous one but which runs every minute:
 
 ```
 jobs: {
@@ -31,12 +51,6 @@ jobs: {
       schedule: "* * * * *"
     }
 }
-```
-
-You can then remove the application and all its dependencies:
-
-```
-acorn rm vote --force --all
 ```
 
 <details>
@@ -184,10 +198,12 @@ volumes: {
     }
   }
 }
-jobs: {
-    "seed": {
+if args.dev {
+  jobs: {
+      "seed": {
         image: "registry.gitlab.com/voting-application/tools:seed"
-    }
+      }
+  }
 }
 </pre>
 </details>
