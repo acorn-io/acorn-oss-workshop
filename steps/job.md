@@ -176,7 +176,9 @@ containers: {
       }
     } 
     ports: publish : "80/http"
-    memory: 32Mi
+    if ! args.dev {
+      memory: 32Mi
+    }
   }
 }
 secrets: {

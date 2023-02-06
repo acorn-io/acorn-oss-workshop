@@ -40,7 +40,15 @@ Under the hood we could see those containers get an *OOMKilled* error because th
 
 Change the value of the *memory* property to *128Mi* for *result*, *vote* and *db* containers and update the application one more time You should now see all containers are running fine.
 
-You can then remove the application and all the related resources:
+As in development mode *resultui* container needs much more memory, make sure to add the memory constraint for that particular container when the application is running in development mode, this can be done with the following statement:
+
+```
+  if ! args.dev {
+      memory: 32Mi
+  }
+```
+
+Once you have tested that the application is running fine you can remove the app and all the related resources:
 
 ```
 acorn rm vote --all --force
@@ -169,7 +177,9 @@ containers: {
       }
     } 
     ports: publish : "80/http"
-    memory: 32Mi
+    if ! args.dev {
+      memory: 32Mi
+    }
   }
 }
 secrets: {
