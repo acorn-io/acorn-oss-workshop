@@ -80,9 +80,9 @@ You should get an output similar to the following one (your Acorn version might 
 
 ```
 [INFO]  Finding release for channel latest
-[INFO]  Using v0.5.0 as release
-[INFO]  Downloading hash https://github.com/acorn-io/acorn/releases/download/v0.5.0/checksums.txt
-[INFO]  Downloading archive https://github.com/acorn-io/acorn/releases/download/v0.5.0/acorn-v0.5.0-linux-amd64.tar.gz
+[INFO]  Using v0.5.1 as release
+[INFO]  Downloading hash https://github.com/acorn-io/acorn/releases/download/v0.5.1/checksums.txt
+[INFO]  Downloading archive https://github.com/acorn-io/acorn/releases/download/v0.5.1/acorn-v0.5.1-linux-arm64.tar.gz
 [INFO]  Verifying binary download
 [INFO]  Installing acorn to /usr/local/bin/acorn
 ```
@@ -150,12 +150,12 @@ This should return a content similar to the following one:
 ```
   ✔  Running Pre-install Checks
   ✔  Installing ClusterRoles
-  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.5.0)
+  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.5.1)
   ✔  Waiting for controller deployment to be available
   ✔  Waiting for API server deployment to be available
   ✔  Waiting for registry server deployment to be available
   ✔  Running Post-install Checks
-  ✔  Installation done
+  ✔  Installation done                                                                                                                     
 ```
 
 Acorn is installed and ready to manage containerized applications.

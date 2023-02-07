@@ -1,11 +1,9 @@
 labels: {
     application: "votingapp"
 }
-
 args: {
     replicas: 3
 }
-
 profiles: {
     dev: {
         replicas: 1
@@ -14,9 +12,7 @@ profiles: {
         replicas: 2
     }
 }
-
 containers: {
-
   voteui: {
     labels: {
       component: "voteui"
@@ -31,7 +27,6 @@ containers: {
     scale: args.replicas
     memory: 32Mi
   }
-
   vote: {
     labels: {
       component: "vote"
@@ -48,7 +43,6 @@ containers: {
     ports: "5000/http"
     memory: 128Mi
   }
-  
   redis: {
     labels: {
       component: "redis"
@@ -62,7 +56,6 @@ containers: {
     }
     memory: 32Mi
   }
-
   worker: {
     labels: {
       component: "worker"
@@ -74,7 +67,6 @@ containers: {
     }
     memory: 32Mi
   }
-
   db: {
     labels: {
       component: "db"
@@ -92,7 +84,6 @@ containers: {
     }
     memory: 128Mi
   }
-
   result: {
     labels: {
       component: "result"
@@ -113,7 +104,6 @@ containers: {
     }
     memory: 128Mi
   }
-
   resultui: {
     labels: {
       component: "resultui"
@@ -128,10 +118,11 @@ containers: {
       }
     } 
     ports: publish : "80/http"
-    memory: 32Mi
+    if ! args.dev {
+      memory: 32Mi
+    }
   }
 }
-
 secrets: {
     "db-creds": {
         type: "basic"
@@ -141,7 +132,6 @@ secrets: {
         }
     }
 }
-
 volumes: {
   if !args.dev {
     "db": {
@@ -152,9 +142,10 @@ volumes: {
     }
   }
 }
-
-jobs: {
-    "seed": {
+if args.dev {
+  jobs: {
+      "seed": {
         image: "registry.gitlab.com/voting-application/tools:seed"
-    }
+      }
+  }
 }
