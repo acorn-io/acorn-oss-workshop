@@ -40,7 +40,7 @@ Under the hood we could see those containers get an *OOMKilled* error because th
 
 Change the value of the *memory* property to *128Mi* for *result*, *vote* and *db* containers and update the application one more time You should now see all containers are running fine.
 
-As in development mode *resultui* container needs much more memory, make sure to add the memory constraint for that particular container when the application is running in development mode, this can be done with the following statement:
+In development mode *resultui* container needs much more memory than in normal mode. Make sure to add the memory constraint for that particular container only when the application is running in development mode. This can be done with the following statement:
 
 ```
   if ! args.dev {
