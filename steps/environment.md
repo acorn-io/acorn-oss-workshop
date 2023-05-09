@@ -1,13 +1,52 @@
 In this step we will set up the environment that will be used for the workshop.
 
+Note: in this lab you are asked to setup the environment yourself, but in the context of your organization you may already have a Kubernetes cluster (with Acorn installed inside of it) running and managed by an ops/sre team. We've tried to make the instructions below as simple as possible to quickly eliminate the installation step :)
+
 ## Kubernetes cluster
 
 To illustrate this article, we will use a one node k3s cluster.
 k3s comes with an Ingress Controller and a StorageClass by default which is great as both are needed by Acorn so it can expose and provide storage to the application containers.
 
+## Quick path
+
+If you are on Linux / MacOS, first install [Multipass](https://multipass.run) a tool which allows to spin up local Ubuntu VM, then run the following commands. In a couple of minutes you will have access to a one-node k3s with Acorn installed inside of it.
+
+```
+curl -sSLO https://luc.run/acorn.sh
+chmod +x ./acorn.sh
+./acorn.sh 
+```
+
+Note: the same script will have its ps1 counterpart soon so you will be able to use this quick path on Windows too
+
+Once the installation is done, you can run a shell in the newly created VM:
+
+```
+multipass shell acorn
+```
+
+Within this shell, make sure Acorn installation was done correctly:
+
+```
+ubuntu@acorn:~$ acorn check
+NAME                  PASSED    MESSAGE
+RBAC                  true      User can create namespaces
+NodesReady            true      All nodes are ready
+DefaultStorageClass   true      Found default storage class local-path
+IngressCapability     true      Ingress is ready
+Exec                  true      Successfully executed command in container replica
+  ✔  Checks PASSED
+```
+
+If everything went fine you can skip the following and go directly to the [presentation of the Voting Application](./votingapp.md), otherwise feel free to read the rest of this chapter if you want to have a better understanding of the installation process.
+
+## Detailed path
+
+If you don't want (or just can't) to go using the quick path, you can follow the steps below to setup your own environment.
+
 ### Provisionning a VM
 
-You can either spin up a local VM or create one on the infrastructure of a cloud provider.
+First, you need to have a virtual machine, you can either spin up a local VM or create one on the infrastructure of a cloud provider.
 
 #### Local
 
@@ -27,17 +66,19 @@ Using your favorite cloud provider, run a small VM something like 2G RAM, 2vcpus
 
 ### Run a shell in the VM
 
-If you use Multipass, you can run a shell in the VM using the following command:
+Next, you need to run a shell in the newly proviosnned VM.
+
+- if you use Multipass, you can run a shell in the VM using the following command:
 
 ```
 multipass shell k3s
 ```
 
-If you use a VM provisionned on the cloud provider you'll need to use a ssh client with the credentials or keys provided by the cloud provider.
+- if you use a VM provisionned on the cloud provider you'll need to use a ssh client with the credentials or keys provided by the cloud provider.
 
 ### Install k3s
 
-Once in the new VM, install k3s with the following command:
+Next, install k3s with the following command:
 
 ```
 curl -sSL https://get.k3s.io | sh
@@ -61,7 +102,7 @@ You should get a return similar to the one below:
 
 ```
 NAME   STATUS   ROLES                  AGE   VERSION
-k3s    Ready    control-plane,master   42s   v1.25.4+k3s1
+k3s    Ready    control-plane,master   42s   v1.26.4+k3s1
 ```
 
 Note: your version of k3s could be slightly different
@@ -80,9 +121,9 @@ You should get an output similar to the following one (your Acorn version might 
 
 ```
 [INFO]  Finding release for channel latest
-[INFO]  Using v0.5.1 as release
-[INFO]  Downloading hash https://github.com/acorn-io/acorn/releases/download/v0.5.1/checksums.txt
-[INFO]  Downloading archive https://github.com/acorn-io/acorn/releases/download/v0.5.1/acorn-v0.5.1-linux-arm64.tar.gz
+[INFO]  Using v0.6.0 as release
+[INFO]  Downloading hash https://github.com/acorn-io/acorn/releases/download/v0.6.0/checksums.txt
+[INFO]  Downloading archive https://github.com/acorn-io/acorn/releases/download/v0.6.0/acorn-v0.6.0-linux-arm64.tar.gz
 [INFO]  Verifying binary download
 [INFO]  Installing acorn to /usr/local/bin/acorn
 ```
@@ -112,6 +153,7 @@ Available Commands:
   login        Add registry credentials
   logout       Remove registry credentials
   logs         Log all workloads from an app
+  offerings    Show infrastructure offerings
   project      Manage projects
   pull         Pull an image from a remote registry
   push         Push an image to a remote registry
