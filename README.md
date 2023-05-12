@@ -19,6 +19,7 @@ We will follow the steps below:
 - [Introduction to args and profile](./steps/profiles.md) 
 - [Adding labels](./steps/labels.md)  
 - [Memory contraints](./steps/constraints.md)  
+- [Adding heathcheck](./steps/probes.md)  
 - [Running a Job](./steps/job.md)
 - [Run your app in a project](./steps/projects.md)
 - [Build an distribute the application as an Acorn image](./steps/acorn_image.md)

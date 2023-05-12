@@ -84,6 +84,16 @@ containers: {
     ports: publish : "80/http"
     scale: args.replicas
     memory: 32Mi
+    probes: [
+      {
+        type: "readiness"
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        http: {
+            url: "http://localhost"
+        }
+      }
+    ]
   }
   vote: {
     labels: {
@@ -212,5 +222,5 @@ if args.dev {
 
 Note: you can find more information about jobs in [the documentation](https://docs.acorn.io/authoring/jobs)
 
-[Previous](./constraints.md)  
+[Previous](./probes.md)  
 [Next](./projects.md)

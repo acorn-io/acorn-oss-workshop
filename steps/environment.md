@@ -192,7 +192,7 @@ This should return a content similar to the following one:
 ```
   ✔  Running Pre-install Checks
   ✔  Installing ClusterRoles
-  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.5.1)
+  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.6.0)
   ✔  Waiting for controller deployment to be available
   ✔  Waiting for API server deployment to be available
   ✔  Waiting for registry server deployment to be available
