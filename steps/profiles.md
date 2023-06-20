@@ -196,7 +196,7 @@ volumes: {
 </pre>
 </details>
 
-Note: you can find more information about Arguments and Profiles in [the official documentation](https://docs.acorn.io/authoring/args-and-profiles)
+Note: you can find more information about Arguments and Profiles in [the Acorn documentation](https://docs.acorn.io/authoring/args-and-profiles)
 
 [Previous](./development_mode.md)  
 [Next](./labels.md)

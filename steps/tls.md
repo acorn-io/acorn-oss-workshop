@@ -35,13 +35,13 @@ You should get the following message:
 
 ```
   •  You've enabled automatic TLS certificate provisioning with Let's Encrypt. This can take a few minutes to configure.
-  ✔  Running Pre-install Checks
-  ✔  Installing ClusterRoles
-  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.5.0)
-  ✔  Waiting for controller deployment to be available
-  ✔  Waiting for API server deployment to be available
-  ✔  Waiting for registry server deployment to be available
-  ✔  Running Post-install Checks
+  ✔  Running Pre-install Checks                                                                                
+  ✔  Installing ClusterRoles                                                                                   
+  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.7.1)                                 
+  ✔  Waiting for controller deployment to be available                                                         
+  ✔  Waiting for API server deployment to be available                                                         
+  ✔  Waiting for registry server deployment to be available                                                    
+  ✔  Running Post-install Checks                                                                               
   ✔  Installation done
 ```
 

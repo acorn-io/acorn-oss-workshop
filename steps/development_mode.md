@@ -2,7 +2,9 @@ In the previous step we enhanced the Acornfile of the VotingApp defining volumes
 
 ## About development mode
 
-In development mode, Acorn allows to make changes to the source code and see it updated inside the app containers in real time. In this mode Acorn will watch the local directory for changes and synchronize them to the running Acorn app. To activate the development mode we need to use the *-i* flag when running the app as you will do in a bit.
+In development mode, Acorn allows to make changes to the source code and see it updated inside the app containers in real time. In this mode Acorn will watch the local directory for changes and synchronize them to the running Acorn app. To activate the development mode we need to use the *dev* command when running the app as you will do in a bit.
+
+Note: ```acorn dev``` and ```acorn run -i``` are both commands allowing to run an app in dev mode
 
 In this step we will focus on the *result* microservice which is developed with *Node.Js*. If you have a look into the folder containing the application code, you will see 2 build targets are defined in the Dockerfile: the first one is named *dev*, the second one *production*:
 
@@ -56,7 +58,7 @@ Note: Acorn provides many useful functions such as the *std.ifelse*, an helper t
 You can now update the application running it in development mode:
 
 ```
-acorn run -n vote -i .
+acorn dev -n vote .
 ```
 
 note: in development mode you'll notice that the logs of each containers are streamed to the console
@@ -83,7 +85,9 @@ result-f4fd75fb5-66mjc: new socket.io connection
 
 We only show the development mode for the *result* microservice but the same principles would apply for the other microservices as well. 
 
-Change the Acornfile modifying the definition of the *voteui*, *vote* and *result-ui* containers to ensure the development mode is working fine for those ones as well:
+First, stop the application with a CTRL-C on the terminal you used to launch it in dev mode.
+
+Next change the Acornfile modifying the definition of the *voteui*, *vote* and *result-ui* containers to ensure the development mode is working fine for those ones as well:
 
 - voteui:
 
@@ -135,10 +139,10 @@ resultui: {
 }
 ```
 
-Once you have modified the Acornfile you can update the application one more time:
+Then run the application in dev mode once again:
 
 ```
-acorn run -n vote -i . 
+acorn dev -n vote
 ```
 
 We can go one step further and make sure volumes are not used when the app is run in development mode.  
@@ -197,7 +201,7 @@ db: {
 }
 ```
 
-Make sure the VotingApp is working fine in development mode using this new version of the Acornfile. 
+Restart the app in dev mode so the Acornfile changes are taken into account and sure the VotingApp is working fine.
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
@@ -306,7 +310,7 @@ volumes: {
 </pre>
 </details>
 
-Note: you can find more information about development mode in [the official documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
+Note: you can find more information about development mode in [the Acorn documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
 
 [Previous](./volumes.md)  
 [Next](./profiles.md)

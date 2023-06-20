@@ -29,7 +29,8 @@ As described in the documentation, an Acornfile contains the following top level
 - acorns: other Acorn applications that need to be deployed with your app
 - secrets: defines secret bits of data that are automatically generated or passed by the user
 - localData: default data and configuration variables
-- router:
+- routers: support path based HTTP routing to expose multiple containers through a single published service
+- services: cloud services that will be provisioned for an application
 
 The authoring Acornfile documentation gives examples of all the fields available. An Acornfile can be very simple, for instance the one below defines a simple container running the ghost image.
 

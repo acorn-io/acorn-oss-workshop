@@ -165,13 +165,7 @@ Note: if the app was already running you can use the following command to update
 acorn run -n vote --update .
 ```
 
-After a couple of minutes you will get http endpoints (different from the ones you got in the previous step) to access both *voteui* and *resultui* containers:
-
-- voteui : http://voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io
-
-- resultui: http://resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io
-
-You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
+After a few tens of seconds you will be returned the http endpoints to access both *voteui* and *resultui* containers. You can then access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
 <details>
   <summary markdown="span">If you curious about...</summary>
@@ -227,7 +221,7 @@ acorn secret encrypt postgres-credentials
 You will get the encrypted version similar to the following one (note the ACORNENC string at the beginning):
 
 ```
-ACORNENC:eyJ6a0RmcUEzQlF4aUxybGpyWnJtd2l2dzhDeTdIOTlIS216b3NXcXR3WXg0IjoiLVlzYU9yOUJvbVQ2QVk3RFVsLVFMRE9pYmp5MTlsMW9UUFJGSDViVWQwd1kzSmxTbzhYcER2Z2pJZzZmQ1pHSWxlbUtiN1ZPeUxfaHBWYkI2NFRZMndFcHAyVSJ9
+ACORNENC:eyJzV0U4SVY3YUhOM3FJaGtvRnZtOTJycy1MZlpBbnBlZUY2alRjYl80Z0RRIjoiTk9UZFF4VFVUWVc4YUxVWkRaUjlWem5tQTJJRGhjQlJqTDVhT1hrNTNRQUtaZWlGNlZPVERCMUoyOWdvMTJIT25FekcxeHgxSnVJMzRReVRuVlJZSUFsSTh5WSJ9::
 ```
 
 Behind the hood, the encryption is done using the cluster’s public key which can be obtained with the following command:
@@ -245,64 +239,37 @@ client:
     hubServers:
     - acorn.io
   version:
-    commit: 7a4904c7d2d1077885ad6e2775550666b0a96905
-    tag: v0.5.0
-project:
-  publicKeys:
-  - keyID: zkDfqA3BQxiLrljrZrmwivw8Cy7H99HKmzosWqtwYx4
-server:
-  apiServerImage: ghcr.io/acorn-io/acorn:v0.5.0
-  config:
-    acornDNS: auto
-    acornDNSEndpoint: https://alpha-dns.acrn.io/v1
-    autoUpgradeInterval: 5m
-    builderPerProject: false
-    clusterDomains:
-    - .jy7jy0.alpha.on-acorn.io
-    defaultPublishMode: defined
-    httpEndpointPattern: '{{hashConcat 8 .Container .App .Namespace | truncate}}.{{.ClusterDomain}}'
-    ignoreUserLabelsAndAnnotations: false
-    ingressClassName: null
-    internalClusterDomain: svc.cluster.local
-    internalRegistryPrefix: ""
-    letsEncrypt: disabled
-    letsEncryptEmail: ""
-    letsEncryptTOSAgree: false
-    podSecurityEnforceProfile: baseline
-    publishBuilders: false
-    recordBuilds: false
-    setPodSecurityEnforceProfile: true
-    useCustomCABundle: false
-    workloadMemoryDefault: 0
-    workloadMemoryMaximum: 0
-  controllerImage: ghcr.io/acorn-io/acorn:v0.5.0
-  dirty: false
-  gitCommit: 7a4904c7d2d1077885ad6e2775550666b0a96905
-  letsEncryptCertificate: disabled
-  tag: v0.5.0
-  userConfig:
-    acornDNS: null
-    acornDNSEndpoint: null
-    autoUpgradeInterval: null
-    builderPerProject: null
-    clusterDomains: null
-    defaultPublishMode: ""
-    httpEndpointPattern: null
-    ignoreUserLabelsAndAnnotations: null
-    ingressClassName: null
-    internalClusterDomain: ""
-    internalRegistryPrefix: null
-    letsEncrypt: null
-    letsEncryptEmail: ""
-    letsEncryptTOSAgree: null
-    podSecurityEnforceProfile: ""
-    publishBuilders: null
-    recordBuilds: null
-    setPodSecurityEnforceProfile: null
-    useCustomCABundle: false
-    workloadMemoryDefault: null
-    workloadMemoryMaximum: null
-  version: v0.5.0+7a4904c7
+    commit: a3371838f671e229e862cb14235d5cb36a45824f
+    tag: v0.7.0
+projects:
+  acorn:
+    local:
+      apiServerImage: ghcr.io/acorn-io/acorn:v0.7.0
+      config:
+        acornDNS: auto
+        acornDNSEndpoint: https://oss-dns.acrn.io/v1
+        autoUpgradeInterval: 5m
+        clusterDomains:
+        - .xojtjt.oss-acorn.io
+        features:
+          image-allow-rules: false
+        httpEndpointPattern: '{{hashConcat 8 .Container .App .Namespace | truncate}}.{{.ClusterDomain}}'
+        internalClusterDomain: svc.cluster.local
+        letsEncrypt: disabled
+        networkPolicies: true
+        podSecurityEnforceProfile: baseline
+        setPodSecurityEnforceProfile: true
+      controllerImage: ghcr.io/acorn-io/acorn:v0.7.0
+      dirty: false
+      gitCommit: a3371838f671e229e862cb14235d5cb36a45824f
+      letsEncryptCertificate: disabled
+      publicKeys:
+      - keyID: sWE8IV7aHN3qIhkoFvm92rs-LfZAnpeeF6jTcb_4gDQ            <--- PUBLIC KEY
+      tag: v0.7.0
+      userConfig:
+        features:
+          image-allow-rules: false
+      version: v0.7.0+a3371838
 ```
 
 We can then provide the db credential through this encrypted secret to the *db*, *worker* and *result* containers. For that purpose we use the *-s* flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.
@@ -371,9 +338,9 @@ secrets: {
 </pre>
 </details>
 
-Note: you can find more information about secrets in [the official documentation](https://docs.acorn.io/authoring/secrets)
+Note: you can find more information about secrets in [the Acorn documentation](https://docs.acorn.io/authoring/secrets)
 
-Note: In this step we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secret created from the command line. We focused on the connection to the *db* container but we could use the same approach to secure the connection to *redis*. In that case we would rather use a secret of type template because redis defines usernames and passwords as acls in a configuration file.
+Note: In this step we explained how to define and use a secret of type basic in the Acornfile and also how we can use a secret created from the command line. We focused on the connection to the *db* container but we could use the same approach to secure the connection to *redis*.
 
 [Previous](./ops.md)  
 [Next](./volumes.md)

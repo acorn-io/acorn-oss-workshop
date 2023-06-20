@@ -205,7 +205,7 @@ volumes: {
 </pre>
 </details>
 
-Note: you can find more information about labels in [the official documentation](https://docs.acorn.io/authoring/labels)
+Note: you can find more information about labels in [the Acorn documentation](https://docs.acorn.io/authoring/labels)
 
 [Previous](./profiles.md)  
 [Next](./constraints.md)

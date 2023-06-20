@@ -8,12 +8,15 @@ Note: replace the placeholder *YOUR_DOCKERHUB_USERNAME* with your actual DockerH
 acorn run -n vote docker.io/YOUR_DOCKERHUB_USERNAME/acorn-workshop:v#.#.#
 ```
 
-As usual, you should receive http endpoints to access both *voteui* and *resultui* container.
+As usual, you should receive http endpoints to access both *voteui* and *resultui* container. Run the following command to verify the application is using version *v1.0.0* of your image:
 
-- vote ui: http://voteui-vote-c7bc34b6f316.5its5i.alpha.on-acorn.io
-- result ui: http://resultui-vote-f1825499e037.5its5i.alpha.on-acorn.io
+```
+$ acorn app
+NAME      IMAGE                                        HEALTHY   UP-TO-DATE   CREATE    ENDPOINTS  MESSAGE
+vote      index.docker.io/lucj/acorn-workshop:v1.0.0   9         9            65s ago   ...        OK
+```
 
-Next modify the application a bit. You can for instance change the color of the *voteui* background modifying the following part in *vote-ui/content/content.css*:
+Next modify the application a bit. For instance you can change the color of the *voteui* background modifying the following part in *vote-ui/content/content.css*:
 
 ```
 ...
@@ -50,22 +53,20 @@ Then push this new version to the DockerHub:
 acorn push docker.io/YOUR_DOCKERHUB_USERNAME/acorn-workshop:v1.0.1
 ```
 
-After a few tens of seconds the running application should be upgraded from *v1.0.0* to *v1.0.1*
-
-- Application still running in version v1.0.0
+For a few tens of seconds the application is still running in version v1.0.0
 
 ```
 $ acorn app
-NAME      IMAGE                                       HEALTHY   UP-TO-DATE   CREATED   ENDPOINTS                                                                                                                                          MESSAGE
-vote      index.docker.io/lucj/vote-workshop:v1.0.0   7         7            14m ago   http://resultui-vote-f1825499e037.5its5i.alpha.on-acorn.io => resultui:80, http://voteui-vote-c7bc34b6f316.5its5i.alpha.on-acorn.io => voteui:80   OK
+NAME      IMAGE                                       HEALTHY   UP-TO-DATE   CREATED   ENDPOINTS  MESSAGE
+vote      index.docker.io/lucj/vote-workshop:v1.0.0   7         7            14m ago   ...        OK
 ```
 
-- Application now running in version v1.0.1
+Then it is automatically upgraded from *v1.0.0* to *v1.0.1*
 
 ```
 $ acorn app
-NAME      IMAGE                                       HEALTHY   UP-TO-DATE   CREATED   ENDPOINTS                                                                                                                                          MESSAGE
-vote      index.docker.io/lucj/vote-workshop:v1.0.1   7         7            15m ago   http://resultui-vote-f1825499e037.5its5i.alpha.on-acorn.io => resultui:80, http://voteui-vote-c7bc34b6f316.5its5i.alpha.on-acorn.io => voteui:80   OK
+NAME      IMAGE                                       HEALTHY   UP-TO-DATE   CREATED   ENDPOINTS MESSAGE
+vote      index.docker.io/lucj/vote-workshop:v1.0.1   7         7            15m ago   ...       OK
 ```
 
 Using the http endpoint of the *voteui* container you should now see the new color of the background
@@ -75,6 +76,14 @@ Using the http endpoint of the *voteui* container you should now see the new col
 Each time a newer SemVer tag is pushed to the registry the application will be upgraded with the new image.
 
 Change back the content of *vote-ui/content/content.css* so the application looks a little bit nicer for the following steps :)
+
+Once you'r done, remove the application
+
+```
+acorn rm vote -af
+```
+
+Note: you can find more information about Automatic Ugrades in [the Acorn documentation](https://docs.acorn.io/running/auto-upgrades)
 
 [Previous](./acorn_image.md)  
 [Next](./domain.md)

@@ -204,7 +204,7 @@ volumes: {
 </pre>
 </details>
 
-Note: you can find more information about memory constraints in [the official documentation](https://docs.acorn.io/reference/memory)
+Note: you can find more information about memory constraints in [the Acorn documentation](https://docs.acorn.io/reference/memory)
 
 [Previous](./labels.md)  
 [Next](./probes.md)

@@ -1,4 +1,4 @@
-Acorn also allows to define *jobs*. A *job* is used to run a batch job (opposed to a long-running process). A *job* can be run diredtly or scehduled in the same way of a standard Linux *cronjob*. In this step you will add a job used to add dummy votes once the application is ready.
+Acorn also allows to define *jobs*. A *job* is used to run a batch job (opposed to a long-running process). A *job* can be run diredtly or scheduled the same way of a standard Linux *cronjob*. In this step you will add a job used to add dummy votes once the application is ready.
 
 Add the following content at the end of your *Acornfile*:
 
@@ -34,7 +34,9 @@ if args.dev {
 }
 ```
 
-Run the application in "normal" mode then in "dev" mode to make sure the job is only run is this last configuration.
+First run the application in "normal" mode: you will notice is does not create dummy vote as the job is not triggered.
+
+Next stop the app, run it in "dev" mode and verify dummy votes are added by the job
 
 You can then remove the application and all its dependencies:
 

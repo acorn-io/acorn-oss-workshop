@@ -2,7 +2,7 @@ In the previous step we enhanced the Acornfile of the VotingApp and added Acorn 
 
 Both *db* and *redis* containers are databases but as we didn’t specify any storage related properties, the data of each container are stored in their own file system. This is usually fine in a development environment but definitely not what we want in production. 
 
-To ensure data is persisted for both containers we will use Acorn volumes (under the hood this is an abstraction above Kubernetes PersistentVolume resource type).
+In order to ensure data is persisted for both containers we will use Acorn volumes.
 
 # Defining volumes in the Acornfile
 
@@ -157,7 +157,7 @@ volumes: {
 </pre>
 </details>
 
-Note: you can find more information about volumes in [the official documentation](https://docs.acorn.io/running/volumes)
+Note: you can find more information about volumes in [the Acorn documentation](https://docs.acorn.io/running/volumes)
 
 [Previous](./secret.md)  
 [Next](./development_mode.md)

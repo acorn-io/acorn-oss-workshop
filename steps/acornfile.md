@@ -11,8 +11,10 @@ As described in the documentation, an Acornfile contains the following top level
 - secrets: defines secret bits of data that are automatically generated or passed by the user
 - localData: default data and configuration variables
 - routers: support path based HTTP routing to expose multiple containers through a single published service
+- services: cloud services that will be provisioned for an application
 
-To represent the microservices of the VotingApp, create an Acornfile in the *votingapp* folder. This file should only contain the *containers* top level key and an empty element for each microservice as follows:
+To represent the microservices of the VotingApp, create an Acornfile in the *votingapp* folder.  
+This file should only contain the *containers* top level key and an empty element for each microservice as follows:
 
 ```
 containers: {
@@ -205,9 +207,9 @@ It will take a couple of minutes for the application to be up and running (all t
 
 Your endpoints should have the same format as the following ones (the identifiers will be different though):
 
-- voteui : http://voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io
+- voteui : http://voteui-vote-c7bc34b6.xojtjt.oss-acorn.io 
 
-- resultui: http://resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io
+- resultui: http://resultui-vote-f1825499.xojtjt.oss-acorn.io
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
@@ -225,24 +227,24 @@ It should return a result similar to the following one:
 
 ```
 APPS:
-NAME      IMAGE          HEALTHY   UP-TO-DATE   CREATED     ENDPOINTS                                                                                                                                  MESSAGE
-vote      3783c2ae5834   7         7            8m21s ago   http://resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io => resultui:80, http://voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io => voteui:80   OK
+NAME      IMAGE          HEALTHY   UP-TO-DATE   CREATED     ENDPOINTS                                                                                                                        MESSAGE
+vote      603de98b9a63   7         7            8m21s ago   http://resultui-vote-f1825499.xojtjt.oss-acorn.io => resultui:80, http://voteui-vote-c7bc34b6.xojtjt.oss-acorn.io => voteui:80   OK
 
 CONTAINERS:
-NAME                            APP       IMAGE                                                                     STATE     RESTARTCOUNT   CREATED     MESSAGE
-vote.result-594794bbfc-xqgkp    vote      sha256:18ec679d38058d97d5e0d7b101a4fe3ad01f44c228bd3abcb8f36961b8cb9d76   running   0              8m20s ago
-vote.resultui-9f6546859-f9csq   vote      sha256:a6f9230076947f698858df6793097f6b239f3eef108297e4e4d62e9b6f258d9a   running   0              8m20s ago
-vote.worker-6fd688c9cf-vf2jc    vote      sha256:f97cb92018967769330da09bba644da395c176f549e1d11bf48da3a8927cb62e   running   0              8m20s ago
-vote.db-754bb4c9bf-4cv7r        vote      postgres:13.2-alpine                                                      running   0              8m21s ago
-vote.redis-6564f9d99-mfdc4      vote      redis:6.2-alpine3.13                                                      running   0              8m21s ago
-vote.vote-b4b7dc9b9-5vftx       vote      sha256:73836e77179e1eb068d4aa54d58350c0bc2ebf32b45aab80997273278fbd2373   running   0              8m21s ago
-vote.voteui-f77bf48b6-v22kx     vote      sha256:069dcc1ab8846d2eb6e8b57d39a29f07607a477f74ecde66d0ef0e02289300d6   running   0              8m21s ago
+NAME                             APP       IMAGE                                                                     STATE     RESTARTCOUNT   CREATED     MESSAGE
+vote.db-dd4d6646f-2gj2w          vote      postgres:13.2-alpine                                                      running   0              8m21s ago   
+vote.redis-949fd9cd7-6tvnn       vote      redis:6.2-alpine3.13                                                      running   0              8m21s ago   
+vote.result-69ccdc57b5-xjd4t     vote      sha256:4ba7605be0e824efc1ef1f18f0aa6a93c312cebf717b922703c3c5a85ed137e1   running   0              8m21s ago   
+vote.resultui-74fb54c895-2cf26   vote      sha256:57ddc81d1659d6e58defd0b68f1734f8f9f9104f128379dfd53bbeb1b70b1a79   running   0              8m21s ago   
+vote.vote-6c54747c6d-qgjds       vote      sha256:7c0dd21bf7542ed63fc96b119ca97adb48c90e66492fe5db332719552e68215b   running   0              8m21s ago   
+vote.voteui-7fc59756d9-r9s4j     vote      sha256:7c565686dc24c53450033bfeb0fea6db85fc1ea59b67f4007a9dd3591ac22370   running   0              8m21s ago   
+vote.worker-bdb8454b7-4mfbc      vote      sha256:e0a5a7e5b1d0b4e25a0f4a8ed51934223ca570f9b78b43668e1239e2ca33925b   running   0              8m21s ago   
 
 VOLUMES:
-NAME      APP-NAME   BOUND-VOLUME   CAPACITY   STATUS    ACCESS-MODES   CREATED
+NAME      APP-NAME   BOUND-VOLUME   CAPACITY   VOLUME-CLASS   STATUS    ACCESS-MODES   CREATED
 
 SECRETS:
-ALIAS     NAME      TYPE      KEYS      CREATED
+NAME      TYPE      KEYS      CREATED
 ```
 
 The application’s containers have been created and exposed. Currently there are no secrets nor volumes as we did not define those top level elements in the Acornfile (yet).
@@ -262,7 +264,7 @@ kube-node-lease     Active   20m
 acorn               Active   19m
 acorn-system        Active   19m
 acorn-image-system  Active   19m
-vote-81255b28-ad4   Active   2m10s <- namespace created for the application
+vote-81255b28-ad4   Active   8m21s <- namespace created for the application
 ```
 
 Within this namespace there are a Deployment / Pod and a Service for each microservice of the Voting App:
@@ -270,48 +272,48 @@ Within this namespace there are a Deployment / Pod and a Service for each micros
 ```
 $ kubectl get all -n vote-81255b28-ad4
 NAME                           READY   STATUS    RESTARTS   AGE
-pod/voteui-f77bf48b6-v22kx     1/1     Running   0          2m53s
-pod/redis-6564f9d99-mfdc4      1/1     Running   0          2m53s
-pod/resultui-9f6546859-f9csq   1/1     Running   0          2m53s
-pod/vote-b4b7dc9b9-5vftx       1/1     Running   0          2m53s
-pod/worker-6fd688c9cf-vf2jc    1/1     Running   0          2m53s
-pod/result-594794bbfc-xqgkp    1/1     Running   0          2m53s
-pod/db-754bb4c9bf-4cv7r        1/1     Running   0          2m53s
+pod/voteui-f77bf48b6-v22kx     1/1     Running   0          8m21s
+pod/redis-6564f9d99-mfdc4      1/1     Running   0          8m21s
+pod/resultui-9f6546859-f9csq   1/1     Running   0          8m21s
+pod/vote-b4b7dc9b9-5vftx       1/1     Running   0          8m21s
+pod/worker-6fd688c9cf-vf2jc    1/1     Running   0          8m21s
+pod/result-594794bbfc-xqgkp    1/1     Running   0          8m21s
+pod/db-754bb4c9bf-4cv7r        1/1     Running   0          8m21s
 
 NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/db         ClusterIP   10.43.54.204    <none>        5432/TCP   2m53s
-service/redis      ClusterIP   10.43.53.154    <none>        6379/TCP   2m53s
-service/result     ClusterIP   10.43.49.253    <none>        5000/TCP   2m53s
-service/resultui   ClusterIP   10.43.191.30    <none>        80/TCP     2m53s
-service/vote       ClusterIP   10.43.203.229   <none>        5000/TCP   2m53s
-service/voteui     ClusterIP   10.43.199.118   <none>        80/TCP     2m53s
+service/db         ClusterIP   10.43.54.204    <none>        5432/TCP   8m21s
+service/redis      ClusterIP   10.43.53.154    <none>        6379/TCP   8m21s
+service/result     ClusterIP   10.43.49.253    <none>        5000/TCP   8m21s
+service/resultui   ClusterIP   10.43.191.30    <none>        80/TCP     8m21s
+service/vote       ClusterIP   10.43.203.229   <none>        5000/TCP   8m21s
+service/voteui     ClusterIP   10.43.199.118   <none>        80/TCP     8m21s
 
 NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/voteui     1/1     1            1           2m53s
-deployment.apps/redis      1/1     1            1           2m53s
-deployment.apps/resultui   1/1     1            1           2m53s
-deployment.apps/vote       1/1     1            1           2m53s
-deployment.apps/worker     1/1     1            1           2m53s
-deployment.apps/result     1/1     1            1           2m53s
-deployment.apps/db         1/1     1            1           2m53s
+deployment.apps/voteui     1/1     1            1           8m21s
+deployment.apps/redis      1/1     1            1           8m21s
+deployment.apps/resultui   1/1     1            1           8m21s
+deployment.apps/vote       1/1     1            1           8m21s
+deployment.apps/worker     1/1     1            1           8m21s
+deployment.apps/result     1/1     1            1           8m21s
+deployment.apps/db         1/1     1            1           8m21s
 
 NAME                                 DESIRED   CURRENT   READY   AGE
-replicaset.apps/voteui-f77bf48b6     1         1         1       2m53s
-replicaset.apps/redis-6564f9d99      1         1         1       2m53s
-replicaset.apps/resultui-9f6546859   1         1         1       2m53s
-replicaset.apps/vote-b4b7dc9b9       1         1         1       2m53s
-replicaset.apps/worker-6fd688c9cf    1         1         1       2m53s
-replicaset.apps/result-594794bbfc    1         1         1       2m53s
-replicaset.apps/db-754bb4c9bf        1         1         1       2m53s
+replicaset.apps/voteui-f77bf48b6     1         1         1       8m21s
+replicaset.apps/redis-6564f9d99      1         1         1       8m21s
+replicaset.apps/resultui-9f6546859   1         1         1       8m21s
+replicaset.apps/vote-b4b7dc9b9       1         1         1       8m21s
+replicaset.apps/worker-6fd688c9cf    1         1         1       8m21s
+replicaset.apps/result-594794bbfc    1         1         1       8m21s
+replicaset.apps/db-754bb4c9bf        1         1         1       8m21s
 ```
 
 On top of that, an Ingress resource has been created so the web interfaces (*voteui* and *resultui*) can be exposed through the cluster’s Ingress Controller (Traefik in our setup):
 
 ```
 $ kubectl get ingress -n vote-81255b28-ad4
-NAME       CLASS     HOSTS                                             ADDRESS          PORTS   AGE
-voteui     traefik   voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io     89.145.160.110   80      3m41s
-resultui   traefik   resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io   89.145.160.110   80      3m41s
+NAME       CLASS     HOSTS                                               ADDRESS          PORTS   AGE
+voteui     traefik   http://voteui-vote-c7bc34b6.xojtjt.oss-acorn.io     192.168.205.2    80      8m21s
+resultui   traefik   http://resultui-vote-f1825499.xojtjt.oss-acorn.io   192.168.205.2    80      8m21s
 ```
 </details>
 

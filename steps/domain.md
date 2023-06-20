@@ -2,7 +2,9 @@ In this step we will show how to use a custom domain to expose the VotingApp Aco
 
 ## About Acorn default domain
 
-When you run the VotingApp in the previous steps, you probably noticed the http endpoints returned use the *on-acorn.io* domain. 
+When you run the VotingApp in the previous steps, you probably noticed the http endpoints returned use the *oss-acorn.io* domain
+
+Note: before acorn 0.7.0, the endpoints used *on-acorn.io*
 
 To illustrate this, run the VotingApp once again:
 
@@ -12,35 +14,35 @@ acorn run -n vote .
 
 You will get endpoints similar to the following ones:
 
-- voteui: http://voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io
-- resultui: http://resultui-vote-f1825499.jy7jy0.alpha.on-acorn.io
+- voteui: http://voteui-vote-c7bc34b6.8eovu9.oss-acorn.io
+- resultui: http://resultui-vote-f1825499.8eovu9.oss-acorn.io
 
 Using the *dig* command you could see both domain names are resolved to the IP address of your Ingress Controller. 
 
 ```
-$ dig voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io
+$ dig voteui-vote-c7bc34b6.8eovu9.oss-acorn.io
 
-; <<>> DiG 9.18.1-1ubuntu1.3-Ubuntu <<>> voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io
+; <<>> DiG 9.18.12-0ubuntu0.22.04.1-Ubuntu <<>> voteui-vote-c7bc34b6.8eovu9.oss-acorn.io
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 41253
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 51349
 ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 65494
 ;; QUESTION SECTION:
-;voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io. IN A
+;voteui-vote-c7bc34b6.8eovu9.oss-acorn.io. IN A
 
 ;; ANSWER SECTION:
-voteui-vote-c7bc34b6.jy7jy0.alpha.on-acorn.io. 300 IN A	89.145.160.110
+voteui-vote-c7bc34b6.8eovu9.oss-acorn.io. 377 IN A 192.168.205.2
 
-;; Query time: 0 msec
+;; Query time: 151 msec
 ;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
-;; WHEN: Sun Jan 29 19:45:30 UTC 2023
-;; MSG SIZE  rcvd: 90
+;; WHEN: Tue Jun 20 15:42:11 CEST 2023
+;; MSG SIZE  rcvd: 85
 ```
 
-Note: in the example above, the underlying Kubernetes cluster is a one-node k3s running on a VM which IP is *89.145.160.110*. In your environment you should get IP address on which your own Ingress Controller is published (it can be a local IP or an external IP reachable from the Internet).
+Note: in the example above, the underlying Kubernetes cluster is a one-node k3s running on a VM which IP is *192.168.205.2*. In your environment you should get IP address on which your own Ingress Controller is published (it can be a local IP or an external IP reachable from the Internet).
 
 By default, the http endpoints have the following format: 
 
@@ -53,13 +55,13 @@ In the current example, this can be splitted as follows:
 - container: *voteui*
 - application name: *vote*
 - unique hash: *c7bc34b6*
-- cluster domain: *jy7jy0.alpha.on-acorn.io*
+- cluster domain: *8eovu9.oss-acorn.io*
 
 Acorn allows to define a custom cluster domain as well as a custom format for the http endpoints as we will see below.
 
 ## Defining a custom domain during Acorn installation
 
-When installing Acorn we can specify our own cluster domain instead of the default one (*on-acorn.io*) using the *--custom-domain* flag. At the same time we can also disabled the dns managed by Acorn as we don't need it with our custom domain. 
+When installing Acorn we can specify our own cluster domain instead of the default one (*oss-acorn.io*) using the *--custom-domain* flag. At the same time we can also disabled the dns managed by Acorn as we don't need it with our custom domain. 
 
 First configure Acorn with the following command (you can replace the example domain *k8sapps.xyz* by your own domain name):
 
@@ -100,7 +102,7 @@ The changes made above will cause the application to be exposed on the following
 - http://voteui.vote.k8sapps.xyz
 - http://resultui.vote.k8sapps.xyz
 
-On top of this approach, we can also define domain when running the app as we will see below.
+On top of this approach, we can also define a domain at launch time as we will see below.
 
 ## Defining a domain at runtime
 
@@ -121,8 +123,8 @@ To access the application using the endpoints *http://vote.k8sapps.xyz* and *htt
 
 Example of changes that can be done to the */etc/hosts* (your IP address will be different): 
 ```
-89.145.160.110 vote.k8sapps.xyz
-89.145.160.110 result.k8sapps.xyz
+192.168.205.2 vote.k8sapps.xyz
+192.168.205.2 result.k8sapps.xyz
 ```
 
 - change the setting of your own DNS if you have access to it
@@ -131,6 +133,8 @@ We can then access both frontend using the custom domains.
 
 ![Vote UI](./images/domain/vote.png)
 ![Result UI](./images/domain/result.png)
+
+Note: changing the setting of your DNS only makes sense if our cluster can be reached from the internet
 
 Exposing the application with a custom domain is straightforward as we have seen in this step. In the next part we will see how to add a TLS certificate.
 

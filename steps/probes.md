@@ -46,10 +46,10 @@ You should see that *voteui* never becomes ready:
 
 ```
 ...
-STATUS: ENDPOINTS[http://resultui-vote-f1825499.11jp51.alpha.on-acorn.io => resultui:80, http://voteui-vote-c7bc34b6.11jp51.alpha.on-acorn.io => voteui:80] HEALTHY[6/9] UPTODATE[9] [containers: voteui is not ready]
+[containers: voteui is not ready]
 ```
 
-This is normal as we specified a wrong port number in the readiness probe definition (we used port *8080* whereas *voteui* container actually listens on port *80*). Let's fix that and update the probe definition of the *voteui* container so it looks like the following:
+This is a normal behavior as we specified a wrong port number in the readiness probe definition (we used port *8080* whereas *voteui* container actually listens on port *80*). Let's fix that and update the probe definition of the *voteui* container so it looks like the following:
 
 ```
   voteui: {
@@ -250,7 +250,7 @@ volumes: {
 </pre>
 </details>
 
-Note: you can find more information about probes in [the official documentation](https://docs.acorn.io/authoring/containers#probes)
+Note: you can find more information about probes in [the Acorn documentation](https://docs.acorn.io/authoring/containers#probes)
 
 [Previous](./constraints.md)  
 [Next](./job.md)
