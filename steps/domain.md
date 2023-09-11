@@ -4,8 +4,6 @@ In this step we will show how to use a custom domain to expose the VotingApp Aco
 
 When you run the VotingApp in the previous steps, you probably noticed the http endpoints returned use the *oss-acorn.io* domain
 
-Note: before acorn 0.7.0, the endpoints used *on-acorn.io*
-
 To illustrate this, run the VotingApp once again:
 
 ```

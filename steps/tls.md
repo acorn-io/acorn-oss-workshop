@@ -31,17 +31,17 @@ acorn install \
 
 Note: as we are running a one node k3s cluster, the *--ingress-class-name* refers to the IngressClass automatically created by Traefik Ingress Controller (deployed by default in k3s)
 
-You should get the following message:
+You should get an output similar to the following one:
 
 ```
   •  You've enabled automatic TLS certificate provisioning with Let's Encrypt. This can take a few minutes to configure.
-  ✔  Running Pre-install Checks                                                                                
-  ✔  Installing ClusterRoles                                                                                   
-  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/acorn:v0.7.1)                                 
-  ✔  Waiting for controller deployment to be available                                                         
-  ✔  Waiting for API server deployment to be available                                                         
-  ✔  Waiting for registry server deployment to be available                                                    
-  ✔  Running Post-install Checks                                                                               
+  ✔  Running Pre-install Checks
+  ✔  Installing ClusterRoles
+  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/runtime:v0.8.0)
+  ✔  Waiting for controller deployment to be available
+  ✔  Waiting for API server deployment to be available
+  ✔  Waiting for registry server deployment to be available
+  ✔  Running Post-install Checks
   ✔  Installation done
 ```
 

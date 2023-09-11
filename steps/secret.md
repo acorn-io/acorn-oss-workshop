@@ -236,40 +236,40 @@ This returns a result similar to that one, the encryption key being defined unde
 ---
 client:
   cli:
-    hubServers:
-    - acorn.io
+    acornConfig: /home/ubuntu/.config/acorn/config.yaml
+    acornServers:
+    - beta.acorn.io
   version:
-    commit: a3371838f671e229e862cb14235d5cb36a45824f
-    tag: v0.7.0
+    commit: 890365140ae2aadbbfaa11031af267ae97acbdc6
+    tag: v0.8.0
 projects:
-  acorn:
+  kubeconfig/acorn:
     local:
-      apiServerImage: ghcr.io/acorn-io/acorn:v0.7.0
+      apiServerImage: ghcr.io/acorn-io/runtime:v0.8.0
       config:
         acornDNS: auto
         acornDNSEndpoint: https://oss-dns.acrn.io/v1
-        autoUpgradeInterval: 5m
+        autoUpgradeInterval: 1m
         clusterDomains:
-        - .xojtjt.oss-acorn.io
+        - .pyt9p6.oss-acorn.io
         features:
           image-allow-rules: false
         httpEndpointPattern: '{{hashConcat 8 .Container .App .Namespace | truncate}}.{{.ClusterDomain}}'
         internalClusterDomain: svc.cluster.local
         letsEncrypt: disabled
-        networkPolicies: true
         podSecurityEnforceProfile: baseline
         setPodSecurityEnforceProfile: true
-      controllerImage: ghcr.io/acorn-io/acorn:v0.7.0
+      controllerImage: ghcr.io/acorn-io/runtime:v0.8.0
       dirty: false
-      gitCommit: a3371838f671e229e862cb14235d5cb36a45824f
+      gitCommit: 890365140ae2aadbbfaa11031af267ae97acbdc6
       letsEncryptCertificate: disabled
       publicKeys:
-      - keyID: sWE8IV7aHN3qIhkoFvm92rs-LfZAnpeeF6jTcb_4gDQ            <--- PUBLIC KEY
-      tag: v0.7.0
+      - keyID: eP_yqmW8CsMSXdqUZyjiaNFfWKNY8Pwrgq2MnzcbLS0
+      tag: v0.8.0
       userConfig:
         features:
           image-allow-rules: false
-      version: v0.7.0+a3371838
+      version: v0.8.0+89036514
 ```
 
 We can then provide the db credential through this encrypted secret to the *db*, *worker* and *result* containers. For that purpose we use the *-s* flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.

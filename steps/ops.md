@@ -57,7 +57,7 @@ In this step we focused on the application itself and saw how to get information
 
 ## Events
 
-Acorn 0.7.0 introduced the *events* command which allows to list events about the Acorn resources
+Acorn provides the *events* command to get additional information about the running resources:
 
 ```
 acorn events
