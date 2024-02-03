@@ -121,7 +121,7 @@ containers: {
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
     dirs: {
-      "/var/lib/postgresql/data*": "volume://db"
+      "/var/lib/postgresql/data": "volume://db"
     }
   }
   result: {
