@@ -6,7 +6,7 @@ Web interface used to select for an item:
 
 ![Vote UI](./images/votingapp/vote-ui.png)
 
-Web interface showing the result of the vote:
+Web interface showing the result of the votes:
 
 ![Result UI](./images/votingapp/result-ui.png)
 
@@ -21,7 +21,7 @@ Let's give a quick overview of each microservice of the application:
 - vote-ui is a web UI built with VueJS, it allows a user to choose an item between Cats and Dogs
 - vote is a backend exposing an API built with Python / Flask
 - redis is the database where votes are stored
-- worker is a service that retrieves votes from redis and stores the results in a postgres database
+- worker is a service which retrieves votes from redis and stores them in a postgres database
 - db is the Postgres database in which the worker consolidates the votes
 - result is the backend sending votes to the result-ui via websocket
 - result-ui is a web UI built with Angular, it displays the results of the votes

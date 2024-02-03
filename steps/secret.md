@@ -238,38 +238,42 @@ client:
   cli:
     acornConfig: /home/ubuntu/.config/acorn/config.yaml
     acornServers:
-    - beta.acorn.io
+    - acorn.io
   version:
-    commit: 890365140ae2aadbbfaa11031af267ae97acbdc6
-    tag: v0.8.0
+    commit: e2b69a6dbba91acf4bd8192c1f697d410b5556dd
+    tag: v0.10.0
 projects:
   kubeconfig/acorn:
     local:
-      apiServerImage: ghcr.io/acorn-io/runtime:v0.8.0
+      apiServerImage: ghcr.io/acorn-io/runtime:v0.10.0
       config:
         acornDNS: auto
         acornDNSEndpoint: https://oss-dns.acrn.io/v1
+        autoConfigureKarpenterDontEvictAnnotations: true
         autoUpgradeInterval: 1m
         clusterDomains:
-        - .pyt9p6.oss-acorn.io
+        - .hchioq.oss-acorn.io
         features:
           image-allow-rules: false
+          image-role-authorizations: false
         httpEndpointPattern: '{{hashConcat 8 .Container .App .Namespace | truncate}}.{{.ClusterDomain}}'
         internalClusterDomain: svc.cluster.local
         letsEncrypt: disabled
         podSecurityEnforceProfile: baseline
         setPodSecurityEnforceProfile: true
-      controllerImage: ghcr.io/acorn-io/runtime:v0.8.0
+        volumeSizeDefault: 10G
+      controllerImage: ghcr.io/acorn-io/runtime:v0.10.0
       dirty: false
-      gitCommit: 890365140ae2aadbbfaa11031af267ae97acbdc6
+      gitCommit: e2b69a6dbba91acf4bd8192c1f697d410b5556dd
       letsEncryptCertificate: disabled
       publicKeys:
-      - keyID: eP_yqmW8CsMSXdqUZyjiaNFfWKNY8Pwrgq2MnzcbLS0
-      tag: v0.8.0
+      - keyID: Ymh3Pkcaig0TBy_Fecfs1JktJ0UtNvdt65Mu19R3ty4
+      tag: v0.10.0
       userConfig:
         features:
           image-allow-rules: false
-      version: v0.8.0+89036514
+          image-role-authorizations: false
+      version: v0.10.0+e2b69a6d
 ```
 
 We can then provide the db credential through this encrypted secret to the *db*, *worker* and *result* containers. For that purpose we use the *-s* flag and provide the name of the secret we want to use followed by the name of the secret it should be bound to.

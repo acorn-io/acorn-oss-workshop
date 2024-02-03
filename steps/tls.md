@@ -37,7 +37,7 @@ You should get an output similar to the following one:
   •  You've enabled automatic TLS certificate provisioning with Let's Encrypt. This can take a few minutes to configure.
   ✔  Running Pre-install Checks
   ✔  Installing ClusterRoles
-  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/runtime:v0.8.0)
+  ✔  Installing APIServer and Controller (image ghcr.io/acorn-io/runtime:v0.10.0)
   ✔  Waiting for controller deployment to be available
   ✔  Waiting for API server deployment to be available
   ✔  Waiting for registry server deployment to be available
@@ -64,7 +64,6 @@ We can then access both frontend using the custom domains and via https:
 
 ![Vote UI](./images/tls/vote.png)
 ![Result UI](./images/tls/result.png)
-
 
 [Previous](./domain.md)  
 [Next](./congrats.md)

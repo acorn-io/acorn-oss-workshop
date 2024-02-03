@@ -1,6 +1,6 @@
 # Acorn workshop
 
-Acorn is a simple application deployment framework for Kubernetes. It uses a simple format to specify an application running in containers allowing the application to be run, packaged and distributed in any environment and deployed to Kubernetes without needing to know much about it.
+Acorn is an application deployment framework for Kubernetes. It uses a simple format to specify an application running in containers allowing the application to be run, packaged and distributed in any environment and deployed to Kubernetes without needing to know much about it.
 
 ![logo](./steps/images/acorn/acorn.jpeg)
 
@@ -31,5 +31,4 @@ We will follow the steps below:
 
 ## Status
 
-The content of this worshop is still a work in progress, additional content will come soon.    
 Feedback are more than welcome.
