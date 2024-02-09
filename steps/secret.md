@@ -28,7 +28,7 @@ secrets: {
 }
 ```
 
-It defines a secret named *pg-creds*, of type basic, with the value *postgres* set for both the username and password properties.
+It defines a secret named *db-creds*, of type basic, with the value *postgres* set for both the username and password properties.
 
 Next, reference the secret’s username and password into the *worker*, *db* and *result* containers. To do so use the following syntax :
 
@@ -76,12 +76,18 @@ result: {
 
 The Acornfile is slightly better now because the secret is defined once and then referenced in the containers which need it. But, the credentials are still in plain text in the definition of the secret, which is what we’d like to avoid.
 
-Secrets of type Basic or Token have a special feature which allows the auto generation of values in case they are not provided. From the VotingApp perspective we need to define credentials for the *db* container and make sure both *worker* and *result* containers can connect to it, but we don’t need to have access to those credentials externally. In the definition of the secret we can then empty both username and password:
+Secrets of type Basic or Token have a special feature which allows the auto generation of values in case they are not provided. From the VotingApp perspective we need to define credentials for the *db* container and make sure both *worker* and *result* containers can connect to it, but we don’t need to have access to those credentials externally. In the definition of the secret we can then empty both username and password and we can define the characters to use for this automatic generation:
 
 ```
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""
@@ -145,6 +151,12 @@ containers: {
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""
@@ -333,6 +345,12 @@ containers: {
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""

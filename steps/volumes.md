@@ -34,12 +34,15 @@ The *db* container could then be changed as follows:
     env: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
+     "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       "/var/lib/postgresql/data": "volume://db"
     }
   }
 ```
+
+Note: we specify the env var *PGDATA* as this can prevent error depending on the way the storage solution provides the volumes
 
 the *redis* one as follows:
 
@@ -119,6 +122,7 @@ containers: {
     env: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
+     "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       "/var/lib/postgresql/data": "volume://db"
@@ -140,6 +144,12 @@ containers: {
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""
@@ -160,4 +170,4 @@ volumes: {
 Note: you can find more information about volumes in [the Acorn documentation](https://docs.acorn.io/running/volumes)
 
 [Previous](./secret.md)  
-[Next](./development_mode.md)
+[Next](./constraints.md)

@@ -23,6 +23,7 @@ Next modify the definition of each container adding a new label property with *c
     }
     ports: publish : "80/http"
     scale: args.replicas
+    memory: 128Mi
   }
 ```
 
@@ -87,13 +88,16 @@ containers: {
       component: "voteui"
     }
     if args.dev {
-      dirs: "/usr/share/nginx/html": "./vote-ui"
+      dirs: {
+        "/usr/share/nginx/html": "./vote-ui"
+      }
     }
     build: {
       context: "./vote-ui"
     }
     ports: publish : "80/http"
     scale: args.replicas
+    memory: 128Mi
   }
   vote: {
     labels: {
@@ -109,6 +113,7 @@ containers: {
       }
     }
     ports: "5000/http"
+    memory: 128Mi
   }
   redis: {
     labels: {
@@ -121,6 +126,7 @@ containers: {
         "/data": "volume://redis"
       }
     }
+    memory: 128Mi
   }
   worker: {
     labels: {
@@ -131,6 +137,7 @@ containers: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 128Mi
   }
   db: {
     labels: {
@@ -141,12 +148,14 @@ containers: {
     env: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
+      "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       if !args.dev {
         "/var/lib/postgresql/data": "volume://db"
       }
     }
+    memory: 128Mi
   }
   result: {
     labels: {
@@ -166,6 +175,7 @@ containers: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 128Mi
   }
   resultui: {
     labels: {
@@ -181,11 +191,18 @@ containers: {
       }
     } 
     ports: publish : "80/http"
+    memory: std.ifelse(args.dev, 1Gi, 128Mi)
   }
 }
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""
@@ -208,4 +225,4 @@ volumes: {
 Note: you can find more information about labels in [the Acorn documentation](https://docs.acorn.io/authoring/labels)
 
 [Previous](./profiles.md)  
-[Next](./constraints.md)
+[Next](./probes.md)

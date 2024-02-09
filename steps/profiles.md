@@ -21,17 +21,23 @@ profiles: {
 }
 ```
 
-The change above defines a default value for the *replicas* value. It also ensure this default value is modified if the app is ran using a specific profile (*dev or *test* in this example).
+The change above defines a default value for the *replicas* value. It also ensures this default value is modified if the app is ran using a specific profile (*dev or *test* in this example).
 
-Next modify the definition of the *voteui* container so it looks as follows, the number of *voteui* containers now depends on the value of the *replicas* arguments:
+Next modify the definition of the *voteui* container adding the *scale* property so it looks as follows, the number of *voteui* containers now depends on the value of the *replicas* arguments:
 
 ```
   voteui: {
     if args.dev {
-      dirs: "/usr/share/nginx/html": "./vote-ui"
-    } 
+      dirs: {
+        "/usr/share/nginx/html": "./vote-ui"
+      }
+    }
+    build: {
+      context: "./vote-ui"
+    }
     ports: publish : "80/http"
     scale: args.replicas
+    memory: 128Mi
   }
 ```
 
@@ -96,13 +102,16 @@ profiles: {
 containers: {
   voteui: {
     if args.dev {
-      dirs: "/usr/share/nginx/html": "./vote-ui"
+      dirs: {
+        "/usr/share/nginx/html": "./vote-ui"
+      }
     }
     build: {
       context: "./vote-ui"
     }
     ports: publish : "80/http"
     scale: args.replicas
+    memory: 128Mi
   }
   vote: {
     build: {
@@ -115,6 +124,7 @@ containers: {
       }
     }
     ports: "5000/http"
+    memory: 128Mi
   }
   redis: {
     image: "redis:7.0.5-alpine3.16"
@@ -124,6 +134,7 @@ containers: {
         "/data": "volume://redis"
       }
     }
+    memory: 128Mi
   }
   worker: {
     build: "./worker/go"
@@ -131,6 +142,7 @@ containers: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 128Mi
   }
   db: {
     image: "postgres:15.0-alpine3.16"
@@ -138,12 +150,14 @@ containers: {
     env: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
+      "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       if !args.dev {
         "/var/lib/postgresql/data": "volume://db"
       }
     }
+    memory: 128Mi
   }
   result: {
     build: {
@@ -160,6 +174,7 @@ containers: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 128Mi
   }
   resultui: {
     build: {
@@ -172,11 +187,18 @@ containers: {
       }
     } 
     ports: publish : "80/http"
+    memory: std.ifelse(args.dev, 1Gi, 128Mi)
   }
 }
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""

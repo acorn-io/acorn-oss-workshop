@@ -50,6 +50,7 @@ result: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
   }
+  memory: 128Mi
 }
 ```
 
@@ -102,6 +103,7 @@ voteui: {
     context: "./vote-ui"
   }
   ports: publish : "80/http"
+  memory: 128Mi
 }
 ```
 
@@ -119,6 +121,7 @@ vote: {
     }
   }
   ports: "5000/http"
+  memory: 128Mi
 }
 ```
 
@@ -136,14 +139,13 @@ resultui: {
     }
   } 
   ports: publish : "80/http"
+  memory: std.ifelse(args.dev, 1Gi, 128Mi)
 }
 ```
 
-Then run the application in dev mode once again:
-
-```
-acorn dev -n vote
-```
+Note: as this container requires more memory when run in development mode we specify 2 different value:
+- 1Gi when in develoment mode
+- 128Mi otherwise
 
 We can go one step further and make sure volumes are not used when the app is run in development mode.  
 In order to do that we need to:
@@ -177,6 +179,7 @@ redis: {
       "/data": "volume://redis"
     }
   }
+  memory: 128Mi
 }
 ```
 
@@ -192,16 +195,22 @@ db: {
   env: {
     "POSTGRES_USER": "secret://db-creds/username"
     "POSTGRES_PASSWORD": "secret://db-creds/password"
+    "PGDATA": "/var/lib/postgresql/data/db"
   }
   dirs: {
     if !args.dev {
       "/var/lib/postgresql/data": "volume://db"
     }
   }
+  memory: 128Mi
 }
 ```
 
-Restart the app in dev mode so the Acornfile changes are taken into account and sure the VotingApp is working fine.
+Then run the application in dev mode once again and sure the VotingApp is working fine
+
+```
+acorn dev -n vote
+```
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
@@ -217,6 +226,7 @@ containers: {
       context: "./vote-ui"
     }
     ports: publish : "80/http"
+    memory: 128Mi
   }
   vote: {
     build: {
@@ -229,6 +239,7 @@ containers: {
       }
     }
     ports: "5000/http"
+    memory: 128Mi
   }
   redis: {
     image: "redis:7.0.5-alpine3.16"
@@ -238,6 +249,7 @@ containers: {
         "/data": "volume://redis"
       }
     }
+    memory: 128Mi
   }
   worker: {
     build: "./worker/go"
@@ -245,6 +257,7 @@ containers: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 128Mi
   }
   db: {
     image: "postgres:15.0-alpine3.16"
@@ -252,12 +265,14 @@ containers: {
     env: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
+      "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       if !args.dev {
         "/var/lib/postgresql/data": "volume://db"
       }
     }
+    memory: 128Mi
   }
   result: {
     build: {
@@ -274,6 +289,7 @@ containers: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
+    memory: 128Mi
   }
   resultui: {
     build: {
@@ -286,11 +302,18 @@ containers: {
       }
     } 
     ports: publish : "80/http"
+    memory: std.ifelse(args.dev, 1Gi, 128Mi)
   }
 }
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""
@@ -312,5 +335,5 @@ volumes: {
 
 Note: you can find more information about development mode in [the Acorn documentation](https://docs.acorn.io/getting-started#step-6-development-mode)
 
-[Previous](./volumes.md)  
+[Previous](./constraints.md)  
 [Next](./profiles.md)
