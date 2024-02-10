@@ -24,6 +24,10 @@ We can also list the running containers:
 acorn containers
 ```
 
+This list of containers can also be see in Acorn saas
+
+![App details](./images/ops/app-details.png)
+
 ## Getting the logs
 
 Acorn allows us to get the logs of the whole application:
@@ -53,8 +57,6 @@ From the command line we can launch a command in a running container. The comman
 ```
 acorn exec vote.voteui-8689cb8f88-4n2h7
 ```
-
-![Container exec](./images/ops/container-exec.png)
 
 The exec into a container can easily be done from Acorn Saas selecting the container's menu:
 
