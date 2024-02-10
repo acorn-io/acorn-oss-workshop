@@ -65,9 +65,9 @@ acorn run -n vote --update .
 As in the previous step, you should be returned the http endpoints used to access both *voteui* and *resultui* frontends. 
 
 <details>
-  <summary markdown="span">If you curious about...</summary>
+  <summary markdown="span">If you are using a local cluster and are curious about what happening under the hood...</summary>
 
-... what happened under the hood, you can see 2 PersistentVolume have been created, one for each database container:
+you can see 2 PersistentVolume have been created, one for each database container:
 
 ```
 $ kubectl get pv

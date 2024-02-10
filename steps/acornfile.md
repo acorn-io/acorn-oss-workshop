@@ -255,9 +255,9 @@ NAME      TYPE      KEYS      CREATED
 The application’s containers have been created and exposed. Currently there are no secrets nor volumes as we did not define those top level elements in the Acornfile (yet).
 
 <details>
-  <summary markdown="span">If you are using a local cluster and are curious about...</summary>
+  <summary markdown="span">If you are using a local cluster and are curious about what happening under the hood...</summary>
 
-...what happened under the hood, we could see that a new Kubernetes namespace has been created in the cluster, this one is dedicated to our newly created acorn application:
+you could see that a new Kubernetes namespace has been created in the cluster, this one is dedicated to our newly created acorn application:
 
 ```
 $ kubectl get ns
