@@ -7,15 +7,15 @@ First go to [https://acorn.io](https://acorn.io)
 Next login using you GitHub account (this is the only thing you need to create a free account on the Acorn hosted environment)
 
 
-![Login](./images/environments/saas/acorn-login-1.png)
+![Login](./images/environments/saas/login-1.png)
 
-![Login](./images/environments/saas/acorn-login-2.png)
+![Login](./images/environments/saas/login-2.png)
 
-![Login](./images/environments/saas/acorn-login-3.png)
+![Login](./images/environments/saas/login-3.png)
 
 Once logged you will get to the dashboard
 
-![Dasbboard](./images/environments/saas/acorn-dashboard.png)
+![Dasbboard](./images/environments/saas/dashboard.png)
 
 From there you will be able to deploy an Acorn from an existing image or from a service catalog.
 
@@ -42,7 +42,7 @@ You will get a response similar to the following one:
 
 Then check the web UI making sure the status is now *Connected*
 
-![Setup CLI](./images/login/setup-cli-2.png)
+![Setup CLI](./images/environments/saas/setup-cli-2.png)
 
 Your Acorn cli is now configured and ready to manage containerized applications.
 
