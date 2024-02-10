@@ -4,7 +4,7 @@ Acorn is an application deployment framework for Kubernetes. It uses a simple fo
 
 ![logo](./steps/images/acorn/acorn.jpeg)
 
-In this workshop we will use a sample microservice application and show how we can build / run / package and distribute it using [Acorn](https://acorn.io).  
+In this workshop we will use a sample microservice application and show how we can build / run / package and distribute it using Acorn.
 
 We will follow the steps below:  
   
