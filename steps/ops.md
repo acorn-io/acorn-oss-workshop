@@ -32,16 +32,19 @@ Acorn allows us to get the logs of the whole application:
 acorn logs vote
 ```
 
-![Application logs](./images/ops/app-logs.png)
-
-
 It also allows to get the logs of a single container as illustrated with the following command which get the logs of the *voteui* container (which fullname can be retrieved from the list of containers):
 
 ```
 acorn logs vote.voteui-8689cb8f88-4n2h7
 ```
 
-![Container logs](./images/ops/container-logs.png)
+You can also see all the logs directly from Acorn Saas selecting a container
+
+![Logs](./images/ops/logs-1.png)
+
+![Logs](./images/ops/logs-2.png)
+
+This is handy as you can also select the container you want to visualize the logs.
 
 ## Running command in a container
 
@@ -53,7 +56,11 @@ acorn exec vote.voteui-8689cb8f88-4n2h7
 
 ![Container exec](./images/ops/container-exec.png)
 
-In this step we focused on the application itself and saw how to get information and interact with it. In the next step we will enhance the Acornfile using Acorn secrets.
+The exec into a container can easily be done from Acorn Saas selecting the container's menu:
+
+![Container exec](./images/ops/exec-1.png)
+
+![Container exec](./images/ops/exec-2.png)
 
 ## Events
 
@@ -63,15 +70,26 @@ Acorn provides the *events* command to get additional information about the runn
 acorn events
 ```
 
+These events can also be seen from Acorn Saas selecting the *Views Events* menu from the top drop down
+
+![Events](./images/ops/events-1.png)
+
+![Events](./images/ops/events-2.png)
+
 ## Cleanup
 
 ## Running the application
 
-Delete the application once again:
+Delete the application, either using the following command:
 
 ```
 acorn rm vote
 ```
+
+or from Acorn Saas
+
+![Remove application](./images/ops/remove-app.png)
+
 
 [Previous](./acornfile.md)  
 [Next](./secret.md)
