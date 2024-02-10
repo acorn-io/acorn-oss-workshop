@@ -9,7 +9,7 @@ In this workshop we will use a sample microservice application and show how we c
 We will follow the steps below:  
   
 - [Introduction to Acorn](./steps/acorn.md)
-- [Environment](./steps/environment.md)
+- [Environments](./steps/environments.md)
 - [Sample application](./steps/votingapp.md)
 - [Write your first Acornfile](./steps/acornfile.md)
 - [Interact with the application](./steps/ops.md)
