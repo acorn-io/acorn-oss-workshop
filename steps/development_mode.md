@@ -59,7 +59,7 @@ Note: Acorn provides many useful functions such as the *std.ifelse*, an helper t
 You can now update the application running it in development mode:
 
 ```
-acorn dev -n vote .
+acorn run -i
 ```
 
 note: in development mode you'll notice that the logs of each containers are streamed to the console
@@ -209,8 +209,12 @@ db: {
 Then run the application in dev mode once again and sure the VotingApp is working fine
 
 ```
-acorn dev -n vote
+acorn run -i
 ```
+
+When run in Development mode, you should see the *Dev Mode* label under the application name in Acorn Saas
+
+![Dev Mode](./images/devmode/dev-mode.png)
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
