@@ -1,4 +1,12 @@
-In this step we will show how to expose an Acorn application over https.
+In this step we will show how to expose an Acorn application over https. We will consider 2 cases:
+- you are running Acorn on your own cluster
+- you are using Acorn Saas platform
+
+## Using Acorn Saas
+
+You already covered, using Acorn Saas your on-acorn.io and custom domains are already served over TLS :)
+
+## Using your own Acorn
 
 ----------------------------------------------------------------------------
                                 WARNING
@@ -9,7 +17,7 @@ To be able to follow the steps below you need:
 
 If you do not have the prerequisites above, please just read along the following steps to undersrtand the main principles.
 
-## Adding a TLS certificate
+### Adding a TLS certificate
 
 There are 2 ways to associate a TLS certificate to an Acorn application:
 - using cert-manager, a tool wildly used in the ecosystem
@@ -17,7 +25,7 @@ There are 2 ways to associate a TLS certificate to an Acorn application:
 
 In the following we will focus on the second approach.
 
-## Acorn integration with Let's Encrypt
+### Acorn integration with Let's Encrypt
 
 In order to enabled the Let's Encrypt integration, we need to modify the Acorn installation option as follows (make sure to replace the EMAIL_ADDRESS placeholder with your real email address):
 
@@ -64,6 +72,7 @@ We can then access both frontend using the custom domains and via https:
 
 ![Vote UI](./images/tls/vote.png)
 ![Result UI](./images/tls/result.png)
+
 
 [Previous](./domain.md)  
 [Next](./congrats.md)
