@@ -204,13 +204,17 @@ acorn run -n vote .
 ```
 
 It will take a couple of minutes for the application to be up and running (all the containers need to be built first).  
-When it’s ready you should be returned the http endpoints (on the *oss-acorn.io* domain) to access both *voteui* and *resultui* containers.
+When it's running you will be returned the https endpoints (on the *oss-acorn.io* domain) to access both *voteui* and *resultui* containers.
 
 Your endpoints should have the same format as the following ones (the identifiers will be different though):
 
-- voteui : http://voteui-vote-c7bc34b6.hchioq.oss-acorn.io 
+- voteui: https://vote-8bc9eaf7.zvgz4d.on-acorn.io
 
-- resultui: http://resultui-vote-f1825499.hchioq.oss-acorn.io
+- resultui: https://vote-027d5876.zvgz4d.on-acorn.ioyou'll see all the containers in the running state in Acorn Saas.
+
+You should also see all the containers in the Running status in Acorn Saas.
+
+![Vote UI](./images/acornfile/dashboard.png)
 
 You can now access the Vote UI, select your favorite pet, then make sure your vote has been taken into account accessing the result UI.
 
@@ -228,18 +232,18 @@ It should return a result similar to the following one:
 
 ```
 ACORNS:
-NAME      IMAGE          COMMIT    CREATED   ENDPOINTS                                                                                            MESSAGE
-vote      cc56311d80b5             60s ago   http://resultui-vote-f1825499.hchioq.oss-acorn.io, http://voteui-vote-c7bc34b6.hchioq.oss-acorn.io   OK
+NAME      IMAGE          COMMIT    CREATED     ENDPOINTS                                                                            MESSAGE
+vote      48772631df2a             5m13s ago   https://vote-027d5876.zvgz4d.on-acorn.io, https://vote-8bc9eaf7.zvgz4d.on-acorn.io   OK
 
 CONTAINERS:
-NAME                             ACORN     IMAGE                  STATE     RESTARTCOUNT   CREATED   MESSAGE
-vote.db-7d4fcf5d86-zk482         vote      postgres:13.2-alpine   running   0              60s ago   
-vote.redis-5cffc5447-4w69w       vote      redis:6.2-alpine3.13   running   0              60s ago   
-vote.result-5dddc56bc7-f6sbj     vote      f61b8d4f1f94           running   0              60s ago   
-vote.resultui-779c8db4d7-5r5zk   vote      c9094cad0edb           running   0              60s ago   
-vote.vote-664b7879bd-h7kv8       vote      607c526631de           running   0              60s ago   
-vote.voteui-9cb594fd5-zgfvx      vote      f4dfdb714098           running   0              60s ago   
-vote.worker-d885fcfc7-z6s4n      vote      14635cdd2e51           running   0              60s ago   
+NAME                             ACORN     IMAGE                  STATE     RESTARTCOUNT   CREATED     MESSAGE
+vote.redis-d55df9d5-xk6pk        vote      redis:6.2-alpine3.13   running   0              5m12s ago   
+vote.result-769b6554b9-whxn6     vote      17547cf83ccc           running   0              5m12s ago   
+vote.resultui-57ccb7cc47-jnz44   vote      14a4026ae0ab           running   0              5m12s ago   
+vote.vote-65fbdfdc46-7nsls       vote      7828ab36cb1b           running   0              5m12s ago   
+vote.voteui-85578b499f-z6f8m     vote      86ed1046d2b4           running   0              5m12s ago   
+vote.worker-746577458f-vjcds     vote      5442999a9868           running   0              5m12s ago   
+vote.db-6857fb89cb-grgzr         vote      postgres:13.2-alpine   running   0              5m13s ago   
 
 VOLUMES:
 NAME      BOUND-VOLUME   CAPACITY   VOLUME-CLASS   STATUS    ACCESS-MODES   CREATED
@@ -251,9 +255,9 @@ NAME      TYPE      KEYS      CREATED
 The application’s containers have been created and exposed. Currently there are no secrets nor volumes as we did not define those top level elements in the Acornfile (yet).
 
 <details>
-  <summary markdown="span">If you are curious about...</summary>
+  <summary markdown="span">If you are using a local cluster and are curious about what happening under the hood...</summary>
 
-...what happened under the hood, we could see that a new Kubernetes namespace has been created in the cluster, this one is dedicated to our newly created acorn application:
+you could see that a new Kubernetes namespace has been created in the cluster, this one is dedicated to our newly created acorn application:
 
 ```
 $ kubectl get ns

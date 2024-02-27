@@ -34,12 +34,15 @@ The *db* container could then be changed as follows:
     env: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
+     "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       "/var/lib/postgresql/data": "volume://db"
     }
   }
 ```
+
+Note: we specify the env var *PGDATA* as this can prevent error depending on the way the storage solution provides the volumes
 
 the *redis* one as follows:
 
@@ -62,9 +65,9 @@ acorn run -n vote --update .
 As in the previous step, you should be returned the http endpoints used to access both *voteui* and *resultui* frontends. 
 
 <details>
-  <summary markdown="span">If you curious about...</summary>
+  <summary markdown="span">If you are using a local cluster and are curious about what happening under the hood...</summary>
 
-... what happened under the hood, you can see 2 PersistentVolume have been created, one for each database container:
+you can see 2 PersistentVolume have been created, one for each database container:
 
 ```
 $ kubectl get pv
@@ -119,6 +122,7 @@ containers: {
     env: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
+     "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       "/var/lib/postgresql/data": "volume://db"
@@ -140,6 +144,12 @@ containers: {
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""
@@ -160,4 +170,4 @@ volumes: {
 Note: you can find more information about volumes in [the Acorn documentation](https://docs.acorn.io/running/volumes)
 
 [Previous](./secret.md)  
-[Next](./development_mode.md)
+[Next](./constraints.md)

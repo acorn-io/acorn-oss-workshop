@@ -1,6 +1,6 @@
-In this step we will set up the environment that will be used for the workshop.
+In this step we will set up a local environment.
 
-Note: in this lab you are asked to setup the environment yourself, but in the context of your organization you may already have a Kubernetes cluster (with Acorn installed inside of it) running and managed by an ops/sre team. We've tried to make the instructions below as simple as possible to quickly eliminate the installation step :)
+Note: in this lab you are asked to setup the environment yourself, but in the context of your organization you may already have a Kubernetes cluster (with Acorn installed inside of it) running and managed by an ops/sre team. We've tried to make the instructions below as simple as possible to quickly eliminate the installation steps :)
 
 ## Kubernetes cluster
 
@@ -208,7 +208,7 @@ This should return a content similar to the following one:
   ✔  Installation done
 ```
 
-Acorn is installed and ready to manage containerized applications.
+Your local Acorn installation is now ready to manage containerized applications.
 
-[Previous](./acorn.md)  
+[Previous](./environments.md)  
 [Next](./votingapp.md)

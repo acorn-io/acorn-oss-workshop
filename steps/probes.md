@@ -22,7 +22,7 @@ Change the *voteui* container specifying a readiness probe as follows (this prob
     }
     ports: publish : "80/http"
     scale: args.replicas
-    memory: 32Mi
+    memory: 128Mi
     probes: [
       {
         type: "readiness"
@@ -64,7 +64,7 @@ This is a normal behavior as we specified a wrong port number in the readiness p
     }
     ports: publish : "80/http"
     scale: args.replicas
-    memory: 32Mi
+    memory: 128Mi
     probes: [
       {
         type: "readiness"
@@ -91,6 +91,7 @@ In this step we've only added a readiness probe to *voteui* container to illustr
 
 <details>
   <summary markdown="span">Acornfile you should have at the end of this step...</summary>
+<pre>
 labels: {
     application: "votingapp"
 }
@@ -111,14 +112,16 @@ containers: {
       component: "voteui"
     }
     if args.dev {
-      dirs: "/usr/share/nginx/html": "./vote-ui"
+      dirs: {
+        "/usr/share/nginx/html": "./vote-ui"
+      }
     }
     build: {
       context: "./vote-ui"
     }
     ports: publish : "80/http"
     scale: args.replicas
-    memory: 32Mi
+    memory: 128Mi
     probes: [
       {
         type: "readiness"
@@ -157,7 +160,7 @@ containers: {
         "/data": "volume://redis"
       }
     }
-    memory: 32Mi
+    memory: 128Mi
   }
   worker: {
     labels: {
@@ -168,7 +171,7 @@ containers: {
      "POSTGRES_USER": "secret://db-creds/username"
      "POSTGRES_PASSWORD": "secret://db-creds/password"
     }
-    memory: 32Mi
+    memory: 128Mi
   }
   db: {
     labels: {
@@ -179,6 +182,7 @@ containers: {
     env: {
       "POSTGRES_USER": "secret://db-creds/username"
       "POSTGRES_PASSWORD": "secret://db-creds/password"
+      "PGDATA": "/var/lib/postgresql/data/db"
     }
     dirs: {
       if !args.dev {
@@ -221,14 +225,18 @@ containers: {
       }
     } 
     ports: publish : "80/http"
-    if ! args.dev {
-      memory: 32Mi
-    }
+    memory: std.ifelse(args.dev, 1Gi, 128Mi)
   }
 }
 secrets: {
     "db-creds": {
         type: "basic"
+        params: {
+          usernameLength:     7
+          usernameCharacters: "a-z"
+          passwordLength:     10
+          passwordCharacters: "A-Za-z0-9"
+        }
         data: {
             username: ""
             password: ""
@@ -245,12 +253,10 @@ volumes: {
     }
   }
 }
-<pre>
-
 </pre>
 </details>
 
 Note: you can find more information about probes in [the Acorn documentation](https://docs.acorn.io/authoring/containers#probes)
 
-[Previous](./constraints.md)  
+[Previous](./labels.md)  
 [Next](./job.md)

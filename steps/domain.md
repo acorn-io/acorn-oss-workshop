@@ -2,45 +2,10 @@ In this step we will show how to use a custom domain to expose the VotingApp Aco
 
 ## About Acorn default domain
 
-When you run the VotingApp in the previous steps, you probably noticed the http endpoints returned use the *oss-acorn.io* domain
-
-To illustrate this, run the VotingApp once again:
-
-```
-acorn run -n vote .
-```
-
-You will get endpoints similar to the following ones:
+When you run the VotingApp in the previous steps, you probably noticed the http endpoints returned use the *oss-acorn.io* domain, similar to the following ones:
 
 - voteui: http://voteui-vote-c7bc34b6.8eovu9.oss-acorn.io
 - resultui: http://resultui-vote-f1825499.8eovu9.oss-acorn.io
-
-Using the *dig* command you could see both domain names are resolved to the IP address of your Ingress Controller. 
-
-```
-$ dig voteui-vote-c7bc34b6.8eovu9.oss-acorn.io
-
-; <<>> DiG 9.18.12-0ubuntu0.22.04.1-Ubuntu <<>> voteui-vote-c7bc34b6.8eovu9.oss-acorn.io
-;; global options: +cmd
-;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 51349
-;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
-
-;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 65494
-;; QUESTION SECTION:
-;voteui-vote-c7bc34b6.8eovu9.oss-acorn.io. IN A
-
-;; ANSWER SECTION:
-voteui-vote-c7bc34b6.8eovu9.oss-acorn.io. 377 IN A 192.168.205.2
-
-;; Query time: 151 msec
-;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
-;; WHEN: Tue Jun 20 15:42:11 CEST 2023
-;; MSG SIZE  rcvd: 85
-```
-
-Note: in the example above, the underlying Kubernetes cluster is a one-node k3s running on a VM which IP is *192.168.205.2*. In your environment you should get IP address on which your own Ingress Controller is published (it can be a local IP or an external IP reachable from the Internet).
 
 By default, the http endpoints have the following format: 
 
@@ -55,9 +20,47 @@ In the current example, this can be splitted as follows:
 - unique hash: *c7bc34b6*
 - cluster domain: *8eovu9.oss-acorn.io*
 
-Acorn allows to define a custom cluster domain as well as a custom format for the http endpoints as we will see below.
+Acorn allows to define a custom cluster domain as well as a custom format as we will see below.
 
-## Defining a custom domain during Acorn installation
+In the following we will consider 2 cases to setup your custom domain:
+- first case: you are running Acorn on your own cluster
+- second case: you are using Acorn Saas platform
+
+## Using a custom domain in Acorn Saas
+
+To use a custom domain when running an application in Acorn Saas you just need to provide the domain using the *-p* flag in the ```acorn run``` command and to create a CNAME in your DNS provider.
+
+Note: I will illustrate the usage of the custom domain *luc.run*, you'll need to replace it with your own domain name.
+
+Running the following command will expose the *voteui* and *resultui* respectively on *vote.luc.run* and *result.luc.run* (on top of automatically on-acorn.io domains)
+
+```
+acorn run -n vote -p vote.luc.run:voteui:80 -p result.luc.run:resultui:80 .
+```
+
+Below is the output showing the domains used:
+
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+| STATUS: ENDPOINTS[https://result.luc.run, https://vote-027d5876.zvgz4d.on-acorn.io, https://vote-8bc9eaf7.zvgz4d.on-acorn.io, https://vote.luc.run] HEALTHY[7] UPTODATE[7] OK |
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+In order for *vote.luc.run* and *result.luc.run* to be available we need to add CNAME in the DNS provider as follows: 
+
+![Cloudflare](./images/domain/saas/cloudflare.png)
+
+We can then access the *vote* and *result* UI
+
+![Vote](./images/domain/saas/vote.png)
+
+![Result](./images/domain/saas/result.png)
+
+Also, as you can see the subdomains are directly served over TLS ! 
+
+## Using a custom domain in your own Acorn installation
+
+### Defining a custom domain during Acorn installation
 
 When installing Acorn we can specify our own cluster domain instead of the default one (*oss-acorn.io*) using the *--custom-domain* flag. At the same time we can also disabled the dns managed by Acorn as we don't need it with our custom domain. 
 
@@ -102,7 +105,7 @@ The changes made above will cause the application to be exposed on the following
 
 On top of this approach, we can also define a domain at launch time as we will see below.
 
-## Defining a domain at runtime
+### Defining a domain at runtime
 
 Acorn allows to specify the domain name of a given container directly from the command line. For instance, the following command update the app using the *-p* / *--publish* flag to define the domains for both *voteui* and *resultui* containers:
 
@@ -133,8 +136,6 @@ We can then access both frontend using the custom domains.
 ![Result UI](./images/domain/result.png)
 
 Note: changing the setting of your DNS only makes sense if our cluster can be reached from the internet
-
-Exposing the application with a custom domain is straightforward as we have seen in this step. In the next part we will see how to add a TLS certificate.
 
 [Previous](./upgrade.md)  
 [Next](./tls.md)
